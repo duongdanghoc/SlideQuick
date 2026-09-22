@@ -1,4 +1,4 @@
-# SlideQuick Backend - Refactored Architecture
+# EduArt AI Backend - Refactored Architecture
 
 ## 🎯 Overview
 

@@ -29,7 +29,7 @@ const fileFilter = (req, file, cb) => {
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb(new Error('画像ファイルのみアップロード可能です'));
+    cb(new Error('Chỉ chấp nhận tải lên các tệp hình ảnh'));
   }
 };
 

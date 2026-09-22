@@ -8,4 +8,6 @@ module.exports = {
   UPLOAD_DIR: process.env.UPLOAD_DIR || './uploads',
   EMAIL_USER: process.env.EMAIL_USER,
   EMAIL_PASS: process.env.EMAIL_PASS,
+  IMAGE_PROVIDER: process.env.IMAGE_PROVIDER || 'fake',
+  FAKE_IMAGE_PROVIDER_MODE: process.env.FAKE_IMAGE_PROVIDER_MODE || 'success',
 };

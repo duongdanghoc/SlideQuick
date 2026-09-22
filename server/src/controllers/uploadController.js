@@ -13,8 +13,8 @@ async function uploadImage(req, res) {
     const url = `http://localhost:${PORT}/uploads/${req.file.filename}`;
     res.json({ url });
   } catch (error) {
-    console.error('アップロードエラー:', error);
-    res.status(500).json({ error: 'ファイルのアップロードに失敗しました' });
+    console.error('Lỗi tải lên:', error);
+    res.status(500).json({ error: 'Tải lên tệp thất bại' });
   }
 }
 

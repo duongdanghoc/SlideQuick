@@ -31,7 +31,7 @@ export const Register: React.FC = () => {
     setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError("パスワードが一致しません。もう一度お試しください。");
+      setError("Mật khẩu không khớp. Vui lòng thử lại.");
       return;
     }
 
@@ -44,10 +44,10 @@ export const Register: React.FC = () => {
       if (success) {
         navigate("/");
       } else {
-        setError("登録に失敗しました");
+        setError("Đăng ký thất bại");
       }
     } catch (err: any) {
-      setError("登録に失敗しました");
+      setError("Đăng ký thất bại");
     } finally {
       setLoading(false);
     }
@@ -63,22 +63,22 @@ export const Register: React.FC = () => {
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-12">
             <LayoutTemplate className="w-8 h-8 text-primary-400" />
-            <span className="text-2xl font-bold font-display">スライドクイック</span>
+            <span className="text-2xl font-bold font-display">EduArt AI</span>
           </div>
           <h1 className="text-5xl font-bold font-display leading-tight mb-6">
-            スマートなプレゼンテーションの<br />
+            Bài thuyết trình thông minh<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-purple-400">
-              未来へ
+              cho tương lai
             </span>
           </h1>
           <div className="grid grid-cols-2 gap-8 mt-12">
             <div>
-              <h3 className="text-xl font-bold mb-2">自動フォーマット</h3>
-              <p className="text-zinc-400">デザインは私たちに任せて、コンテンツに集中してください。</p>
+              <h3 className="text-xl font-bold mb-2">Tự động định dạng</h3>
+              <p className="text-zinc-400">Hãy để chúng tôi lo thiết kế, bạn tập trung vào nội dung.</p>
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-2">プロ用テンプレート</h3>
-              <p className="text-zinc-400">あらゆる用途に対応する数百ものプレミアムテンプレートにアクセス。</p>
+              <h3 className="text-xl font-bold mb-2">Mẫu chuyên nghiệp</h3>
+              <p className="text-zinc-400">Truy cập hàng trăm mẫu cao cấp cho mọi nhu cầu.</p>
             </div>
           </div>
         </div>
@@ -88,15 +88,15 @@ export const Register: React.FC = () => {
       <div className="flex items-center justify-center p-6 bg-slate-50">
         <div className="w-full max-w-md space-y-8 animate-fade-in">
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">アカウントを作成</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Tạo tài khoản</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input
-              label="ユーザー名"
+              label="Tên người dùng"
               name="username"
               type="text"
-              placeholder="ユーザー名を選択"
+              placeholder="Chọn tên người dùng"
               value={formData.username}
               onChange={handleChange}
               leftIcon={<User className="w-5 h-5" />}
@@ -104,7 +104,7 @@ export const Register: React.FC = () => {
             />
 
             <Input
-              label="メールアドレス"
+              label="Địa chỉ email"
               name="email"
               type="email"
               placeholder="name@company.com"
@@ -114,10 +114,10 @@ export const Register: React.FC = () => {
             />
 
             <Input
-              label="パスワード"
+              label="Mật khẩu"
               name="password"
               type="password"
-              placeholder="パスワードを作成"
+              placeholder="Tạo mật khẩu"
               value={formData.password}
               onChange={handleChange}
               leftIcon={<Lock className="w-5 h-5" />}
@@ -125,10 +125,10 @@ export const Register: React.FC = () => {
             />
 
             <Input
-              label="パスワード確認"
+              label="Xác nhận mật khẩu"
               name="confirmPassword"
               type="password"
-              placeholder="パスワードを再入力"
+              placeholder="Nhập lại mật khẩu"
               value={formData.confirmPassword}
               onChange={handleChange}
               leftIcon={<Lock className="w-5 h-5" />}
@@ -148,17 +148,17 @@ export const Register: React.FC = () => {
               isLoading={loading}
               rightIcon={<ArrowRight className="w-5 h-5" />}
             >
-              始める
+              Bắt đầu
             </Button>
           </form>
 
           <div className="text-center text-sm text-slate-600">
-            すでにアカウントをお持ちですか？{" "}
+            Đã có tài khoản?{" "}
             <Link
               to="/login"
               className="font-medium text-primary-600 hover:text-primary-700 hover:underline"
             >
-              サインイン
+              Đăng nhập
             </Link>
           </div>
         </div>

@@ -18,8 +18,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const navItems = [
-    { label: 'すべてのプロジェクト', icon: <Home className="w-5 h-5" />, path: '/' },
-    { label: 'ゴミ箱', icon: <Trash2 className="w-5 h-5" />, path: '/trash' },
+    { label: 'Tất cả dự án', icon: <Home className="w-5 h-5" />, path: '/' },
+    { label: 'Thùng rác', icon: <Trash2 className="w-5 h-5" />, path: '/trash' },
   ];
 
   return (
@@ -31,7 +31,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex items-center gap-8">
               <Link to="/" className="flex items-center gap-2">
                 <LayoutTemplate className="w-7 h-7 text-primary-600" />
-                <span className="text-xl font-bold font-display text-primary-600">スライドクイック</span>
+                <span className="text-xl font-bold font-display text-primary-600">EduArt AI</span>
               </Link>
 
               <div className="hidden md:flex gap-1">

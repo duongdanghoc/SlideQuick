@@ -149,7 +149,7 @@ const TemplateLibrary: React.FC<TemplateLibraryProps> = ({
     <div className="fixed inset-0 z-40 bg-white flex flex-col">
       {/* Modal Header */}
       <header className="h-16 border-b border-slate-200 flex items-center justify-between px-6 bg-white sticky top-0 z-10">
-        <h1 className="text-xl font-bold text-slate-800">テンプレートを選択</h1>
+        <h1 className="text-xl font-bold text-slate-800">Chọn mẫu</h1>
         <button
           onClick={onClose}
           className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-500"
@@ -176,7 +176,7 @@ const TemplateLibrary: React.FC<TemplateLibraryProps> = ({
               className={`pb-2 px-2 text-sm font-medium transition-colors relative ${activeTab === 'all' ? 'text-primary-600' : 'text-slate-500 hover:text-slate-800'
                 }`}
             >
-              標準ライブラリ
+              Thư viện chuẩn
               {activeTab === 'all' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-t-full" />}
             </button>
             <button
@@ -184,7 +184,7 @@ const TemplateLibrary: React.FC<TemplateLibraryProps> = ({
               className={`pb-2 px-2 text-sm font-medium transition-colors relative ${activeTab === 'favorites' ? 'text-primary-600' : 'text-slate-500 hover:text-slate-800'
                 }`}
             >
-              お気に入り
+              Yêu thích
               {activeTab === 'favorites' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-t-full" />}
             </button>
           </div>
@@ -200,18 +200,18 @@ const TemplateLibrary: React.FC<TemplateLibraryProps> = ({
                 <div
                   className="group flex flex-col cursor-pointer transition-all hover:-translate-y-1"
                   onClick={() => onSelectTemplate({
-                    id: 'sub_blank', name: '空白のプレゼンテーション', colors: ['#ffffff', '#000000'],
+                    id: 'sub_blank', name: 'Bài thuyết trình trống', colors: ['#ffffff', '#000000'],
                     fontFamily: 'Inter, sans-serif', tags: '', isStandard: true,
                     style: { backgroundColor: '#ffffff', textColor: '#000000', accentColor: '#3b82f6', fontFamily: 'Inter, sans-serif' },
                     createdAt: ''
                   })}
                 >
                   <div className="relative aspect-video w-full overflow-hidden rounded-lg shadow-sm border border-slate-200 group-hover:shadow-md transition-shadow bg-white flex items-center justify-center">
-                    <span className="text-slate-400 font-medium">空白</span>
+                    <span className="text-slate-400 font-medium">Trống</span>
                   </div>
                   <div className="mt-3 px-1">
-                    <h3 className="text-sm font-semibold text-slate-800">空白のプレゼンテーション</h3>
-                    <span className="text-xs text-slate-500">最初から作成</span>
+                    <h3 className="text-sm font-semibold text-slate-800">Bài thuyết trình trống</h3>
+                    <span className="text-xs text-slate-500">Tạo từ đầu</span>
                   </div>
                 </div>
               )}

@@ -1,79 +1,79 @@
-# SlideQuick
+# EduArt AI
 
-A modern web-based presentation editor that enables educators and professionals to create, customize, and present slides effortlessly — no design skills required.
+Ứng dụng chỉnh sửa và tạo bài thuyết trình hiện đại trên nền tảng web, giúp các nhà giáo dục và chuyên gia dễ dàng tạo, tùy chỉnh và trình bày các trang chiếu một cách chuyên nghiệp — không cần kỹ năng thiết kế.
 
-> Built as a capstone project at Hanoi University of Science and Technology (HUST) — ITSS Japanese IT course.
+> Dự án tốt nghiệp tại Đại học Bách Khoa Hà Nội (HUST) — Chương trình Công nghệ Thông tin Việt-Nhật (ITSS).
 
-## Key Features
+## Tính năng chính
 
-- **Drag-and-Drop Editor** — Freely position text, images, and shapes on a canvas
-- **Rich Text Formatting** — Bold, italic, underline with inline editing
-- **Template Library** — Pre-built layouts (Title, Two-Column, Image+Text, etc.)
-- **PDF & PPTX Export** — Pixel-accurate export for sharing and printing
-- **Fullscreen Presentation** — Present directly from the browser with keyboard navigation
-- **Real-Time Collaboration** — Multi-user editing powered by Yjs & WebSocket
-- **Persistent Storage** — SQLite-backed project and slide management
+- **Trình chỉnh sửa Kéo-và-Thả** — Tự do sắp xếp văn bản, hình ảnh và hình khối trên trang chiếu
+- **Định dạng Văn bản Phong phú** — In đậm, in nghiêng, gạch chân với chỉnh sửa trực tiếp
+- **Thư viện Mẫu thiết kế** — Các bố cục có sẵn (Tiêu đề, Hai cột, Hình ảnh + Văn bản, v.v.)
+- **Xuất tệp PDF & PPTX** — Xuất chất lượng cao chính xác theo thiết kế để chia sẻ và in ấn
+- **Thuyết trình Toàn màn hình** — Thuyết trình trực tiếp từ trình duyệt với các phím điều hướng
+- **Cộng tác Thời gian thực** — Chỉnh sửa đa người dùng đồng thời thông qua Yjs & WebSocket
+- **Lưu trữ Dữ liệu** — Quản lý dự án và trang chiếu với cơ sở dữ liệu SQLite
 
-## Tech Stack
+## Công nghệ sử dụng
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, TypeScript, Vite, Tailwind CSS |
-| Backend | Express.js 5, Node.js |
-| Database | SQLite (better-sqlite3) |
-| Real-time | Yjs, y-websocket, WebSocket |
-| Export | jsPDF, html2canvas, pptxgenjs |
-| UI Icons | Lucide React |
+| Tầng      | Công nghệ                                |
+| --------- | ---------------------------------------- |
+| Frontend  | React 18, TypeScript, Vite, Tailwind CSS |
+| Backend   | Express.js 5, Node.js                    |
+| Database  | SQLite (better-sqlite3)                  |
+| Real-time | Yjs, y-websocket, WebSocket              |
+| Export    | jsPDF, html2canvas, pptxgenjs            |
+| UI Icons  | Lucide React                             |
 
-## Getting Started
+## Hướng dẫn cài đặt
 
-### Prerequisites
+### Yêu cầu hệ thống
 
 - **Node.js** ≥ 18
 - **npm**
 
-### Installation
+### Cài đặt
 
 ```bash
-# Clone the repository
-git clone https://github.com/cvkhang/SlideQuick.git
-cd SlideQuick
+# Clone repository
+git clone https://github.com/cvkhang/EduArt-AI.git
+cd EduArt-AI
 
-# Install frontend dependencies
+# Cài đặt dependencies cho Frontend
 cd frontend
 npm install
 
-# Install backend dependencies
+# Cài đặt dependencies cho Backend
 cd ../server
 npm install
 ```
 
-### Running the App
+### Chạy ứng dụng
 
 ```bash
-# Terminal 1 — Start backend (http://localhost:3001)
+# Terminal 1 — Khởi động Backend (http://localhost:3001)
 cd server
 npm run dev
 
-# Terminal 2 — Start frontend (http://localhost:5173)
+# Terminal 2 — Khởi động Frontend (http://localhost:5173)
 cd frontend
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Mở trình duyệt và truy cập [http://localhost:5173](http://localhost:5173).
 
-## Project Structure
+## Cấu trúc Dự án
 
 ```
-SlideQuick/
-├── frontend/              # React + TypeScript SPA
+EduArt-AI/
+├── frontend/              # Ứng dụng SPA React + TypeScript
 │   └── src/
 │       ├── components/    # SlideEditor, DraggableElement, TemplateLibrary
 │       ├── pages/         # Home, Editor, Presentation
 │       ├── context/       # Global state (AppContext)
-│       ├── services/      # API client layer
-│       ├── utils/         # PDF/PPTX export, layout utilities
-│       └── types/         # TypeScript interfaces
+│       ├── services/      # Lớp gọi API
+│       ├── utils/         # Tiện ích xuất PDF/PPTX, xử lý bố cục
+│       └── types/         # Định nghĩa kiểu TypeScript
 ├── server/                # Express.js REST API (MVC)
 │   └── src/
 │       ├── controllers/   # Route handlers
@@ -82,4 +82,3 @@ SlideQuick/
 │       └── server.js      # Entry point
 └── README.md
 ```
-

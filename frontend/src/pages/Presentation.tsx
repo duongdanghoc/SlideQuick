@@ -53,9 +53,9 @@ export default function Presentation() {
             connectToRoomOnce(room)
               .then(({ project: sharedProject }) => {
                 if (sharedProject) setProject(sharedProject);
-                else setError('共有プレゼンテーションが見つかりません。');
+                else setError('Không tìm thấy bài thuyết trình được chia sẻ.');
               })
-              .catch(() => setError('共有プレゼンテーションの読み込みに失敗しました。'))
+              .catch(() => setError('Tải bài thuyết trình chia sẻ thất bại.'))
               .finally(() => setLoading(false));
           } else {
             // Try public endpoint as last resort (for view-only guests)
@@ -170,7 +170,7 @@ export default function Presentation() {
   if (loading) {
     return (
       <div style={{ color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '2rem', background: '#1e293b' }}>
-        <div className="animate-pulse">プレゼンテーションを読み込み中...</div>
+        <div className="animate-pulse">Đang tải bài thuyết trình...</div>
       </div>
     );
   }
@@ -183,7 +183,7 @@ export default function Presentation() {
           onClick={() => navigate('/')}
           style={{ marginTop: '1rem', padding: '0.5rem 1rem', background: '#3b82f6', borderRadius: '0.5rem', cursor: 'pointer' }}
         >
-          ホームに戻る
+          Về trang chủ
         </button>
       </div>
     );
@@ -192,7 +192,7 @@ export default function Presentation() {
   if (!project) {
     return (
       <div style={{ color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '2rem', background: '#1e293b' }}>
-        読み込み中...
+        Đang tải...
       </div>
     );
   }

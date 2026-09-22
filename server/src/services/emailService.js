@@ -30,7 +30,7 @@ const sendEmail = async (to, subject, text, html) => {
 
   try {
     await transporter.sendMail({
-      from: '"SlideQuick" <noreply@slidequick.com>',
+      from: '"EduArt AI" <noreply@eduart.ai>',
       to,
       subject,
       text,
@@ -48,24 +48,24 @@ const sendEmail = async (to, subject, text, html) => {
  * @param {string} username - User's name
  */
 const sendWelcomeEmail = async (to, username) => {
-  const subject = 'SlideQuickへようこそ！';
+  const subject = 'Chào mừng bạn đến với EduArt AI!';
   const text = `
-    ${username} 様,
+    Xin chào ${username},
 
-    SlideQuickにご登録いただきありがとうございます！
-    私たちは、あなたが素晴らしいプレゼンテーションを作成するのを楽しみにしています。
+    Cảm ơn bạn đã đăng ký tài khoản EduArt AI!
+    Chúng tôi rất vui mừng được đồng hành cùng bạn tạo ra những bài thuyết trình tuyệt vời.
 
-    何かご質問があれば、お気軽にお問い合わせください。
+    Nếu bạn có bất kỳ câu hỏi nào, xin vui lòng liên hệ với chúng tôi.
     
-    SlideQuickチーム
+    Đội ngũ EduArt AI
   `;
   const html = `
-    <h2>${username} 様,</h2>
-    <p>SlideQuickにご登録いただきありがとうございます！</p>
-    <p>私たちは、あなたが素晴らしいプレゼンテーションを作成するのを楽しみにしています。</p>
+    <h2>Xin chào ${username},</h2>
+    <p>Cảm ơn bạn đã đăng ký tài khoản EduArt AI!</p>
+    <p>Chúng tôi rất vui mừng được đồng hành cùng bạn tạo ra những bài thuyết trình tuyệt vời.</p>
     <br>
-    <p>何かご質問があれば、お気軽にお問い合わせください。</p>
-    <p>SlideQuickチーム</p>
+    <p>Nếu bạn có bất kỳ câu hỏi nào, xin vui lòng liên hệ với chúng tôi.</p>
+    <p>Đội ngũ EduArt AI</p>
   `;
 
   await sendEmail(to, subject, text, html);
@@ -77,9 +77,9 @@ const sendWelcomeEmail = async (to, username) => {
  * @param {string} resetLink - Password reset link
  */
 const sendResetPasswordEmail = async (to, resetLink) => {
-  const subject = 'SlideQuick パスワードリセット';
-  const text = `以下のリンクをクリックしてパスワードをリセットしてください:\n\n${resetLink}\n\nこのリンクは1時間有効です。`;
-  const html = `<p>以下のリンクをクリックしてパスワードをリセットしてください:</p><p><a href="${resetLink}">${resetLink}</a></p><p>このリンクは1時間有効です。</p>`;
+  const subject = 'EduArt AI - Đặt lại mật khẩu';
+  const text = `Vui lòng nhấp vào liên kết bên dưới để đặt lại mật khẩu của bạn:\n\n${resetLink}\n\nLiên kết này có hiệu lực trong 1 giờ.`;
+  const html = `<p>Vui lòng nhấp vào liên kết bên dưới để đặt lại mật khẩu của bạn:</p><p><a href="${resetLink}">${resetLink}</a></p><p>Liên kết này có hiệu lực trong 1 giờ.</p>`;
 
   await sendEmail(to, subject, text, html);
 };

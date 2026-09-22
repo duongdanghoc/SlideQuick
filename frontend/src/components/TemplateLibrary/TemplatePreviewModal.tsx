@@ -61,8 +61,8 @@ const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                     fontFamily: template.style.fontFamily
                   }}
                 >
-                  <h1 className="text-4xl font-bold">プレゼンテーションのタイトル</h1>
-                  <p className="text-xl opacity-80" style={{ color: template.style.accentColor }}>サブタイトルをここに入力</p>
+                  <h1 className="text-4xl font-bold">Tiêu đề bài thuyết trình</h1>
+                  <p className="text-xl opacity-80" style={{ color: template.style.accentColor }}>Nhập phụ đề tại đây</p>
                 </div>
               </div>
             </div>
@@ -70,7 +70,7 @@ const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
             {/* Right: Details */}
             <div className="space-y-6">
               <div>
-                <h3 className="text-sm font-semibold text-slate-900 mb-2">カラーパレット</h3>
+                <h3 className="text-sm font-semibold text-slate-900 mb-2">Bảng màu</h3>
                 <div className="flex gap-2">
                   {template.colors.map((color, i) => (
                     <div key={i} className="flex flex-col items-center gap-1">
@@ -85,7 +85,7 @@ const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold text-slate-900 mb-2">タイポグラフィ</h3>
+                <h3 className="text-sm font-semibold text-slate-900 mb-2">Kiểu chữ</h3>
                 <div className="p-3 bg-white rounded border border-slate-200">
                   <p style={{ fontFamily: template.style.fontFamily }} className="text-lg">
                     Ag (Abc)
@@ -100,10 +100,10 @@ const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                   className="w-full justify-center py-6 text-lg shadow-xl shadow-primary-500/20"
                 >
                   <Check className="w-5 h-5 mr-2" />
-                  このテンプレートを使用
+                  Sử dụng mẫu này
                 </Button>
                 <p className="text-xs text-center text-slate-500 mt-2">
-                  このスタイルで新しいプロジェクトを作成
+                  Tạo dự án mới với phong cách này
                 </p>
               </div>
             </div>

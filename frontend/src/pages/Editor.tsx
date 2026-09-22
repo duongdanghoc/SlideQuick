@@ -82,7 +82,7 @@ export default function Editor() {
           const response = await fetch(`${API_URL}/projects/public/${projectId}`);
 
           if (!response.ok) {
-            setAccessDenied('プロジェクトが見つかりません');
+            setAccessDenied('Không tìm thấy dự án');
             return;
           }
 
@@ -91,7 +91,7 @@ export default function Editor() {
           if (data.shareMode === 'private') {
             // Check if logged in user is owner
             if (!currentUser || currentUser.id !== data.ownerId) {
-              setAccessDenied('このプロジェクトは非公開です');
+              setAccessDenied('Dự án này là riêng tư');
               return;
             }
           }
@@ -126,7 +126,7 @@ export default function Editor() {
 
         } catch (err) {
           console.error('Error checking access:', err);
-          setAccessDenied('プロジェクトの読み込みに失敗しました');
+          setAccessDenied('Tải dự án thất bại');
         }
       }
 
@@ -151,7 +151,7 @@ export default function Editor() {
     const timer = setTimeout(() => {
       // Only show timeout error for non-owners waiting for data
       if (!projectLoadedRef.current && !isOwner.current) {
-        setLoadingError('読み込みがタイムアウトしました。リンクを確認するか、更新してください。');
+        setLoadingError('Đã hết thời gian tải. Vui lòng kiểm tra liên kết hoặc làm mới trang.');
       }
     }, 15000);
 
@@ -210,7 +210,7 @@ export default function Editor() {
           if (status === 'disconnected' && !projectLoadedRef.current && !isOwner.current) {
             disconnectTimer = setTimeout(() => {
               if (!projectLoadedRef.current && roomIdRef.current === actualRoomId) {
-                setLoadingError('接続が切れました。ネットワークを確認して再試行してください。');
+                setLoadingError('Mất kết nối. Vui lòng kiểm tra mạng và thử lại.');
               }
             }, 1000);
           }
@@ -237,7 +237,7 @@ export default function Editor() {
       console.error('Failed to connect to Y.js room:', err);
       // Only show error for non-owners
       if (!isOwner.current) {
-        setLoadingError('コラボレーションセッションへの接続に失敗しました。再試行してください。');
+        setLoadingError('Kết nối phiên cộng tác thất bại. Vui lòng thử lại.');
       }
     }
 
@@ -283,7 +283,7 @@ export default function Editor() {
     }
 
     // Fallback to username comparison
-    const myUsername = currentUser?.username || `ゲスト-${clientIdRef.current.slice(0, 4)}`;
+    const myUsername = currentUser?.username || `Khách-${clientIdRef.current.slice(0, 4)}`;
     return lastMessage.sender !== myUsername;
   }, [messages, currentUser, chatViewedInSession]);
 
@@ -327,7 +327,7 @@ export default function Editor() {
 
     const token = localStorage.getItem('sq_token');
     if (!token) {
-      setShareError('共有設定を変更するにはログインが必要です。');
+      setShareError('Bạn cần đăng nhập để thay đổi cài đặt chia sẻ.');
       return;
     }
 
@@ -348,14 +348,14 @@ export default function Editor() {
         setShareLink(getShareLink(newMode));
         setShareError(null);
       } else if (response.status === 401) {
-        setShareError('セッションの有効期限が切れました。再度ログインしてください。');
+        setShareError('Phiên đã hết hạn. Vui lòng đăng nhập lại.');
       } else {
         const data = await response.json();
-        setShareError(data.error || '共有モードの更新に失敗しました');
+        setShareError(data.error || 'Cập nhật chế độ chia sẻ thất bại');
       }
     } catch (err) {
       console.error('Failed to update share mode:', err);
-      setShareError('共有モードの更新に失敗しました。再試行してください。');
+      setShareError('Cập nhật chế độ chia sẻ thất bại. Vui lòng thử lại.');
     }
   }
 
@@ -374,9 +374,9 @@ export default function Editor() {
   if (loadingError) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-slate-50">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">エラー</h2>
+        <h2 className="text-2xl font-bold text-slate-800 mb-2">Lỗi</h2>
         <p className="text-slate-600 mb-6">{loadingError}</p>
-        <Button onClick={() => navigate('/')}>ホームに戻る</Button>
+        <Button onClick={() => navigate('/')}>Về trang chủ</Button>
       </div>
     );
   }
@@ -393,7 +393,7 @@ export default function Editor() {
   const currentSlide = slides[currentSlideIndex];
 
   if (!currentSlide) {
-    return <div className="p-8 text-center text-slate-500">スライドを読み込み中...</div>;
+    return <div className="p-8 text-center text-slate-500">Đang tải trang chiếu...</div>;
   }
 
   const handleAddSlide = async (template: Slide['template']) => {
@@ -404,7 +404,7 @@ export default function Editor() {
 
   const handleDeleteSlide = async () => {
     if (isReadOnly) return;
-    if (currentProject.slides.length > 1 && confirm('このスライドを削除してもよろしいですか？')) {
+    if (currentProject.slides.length > 1 && confirm('Bạn có chắc muốn xóa trang chiếu này?')) {
       await deleteSlide(currentProject.id, currentSlide.id);
       if (currentSlideIndex >= currentProject.slides.length - 1) {
         setCurrentSlideIndex(Math.max(0, currentSlideIndex - 1));
@@ -428,7 +428,7 @@ export default function Editor() {
   const handleSendMessage = async (text: string) => {
     if (roomIdRef.current) {
       sendChatMessage(roomIdRef.current, {
-        sender: currentUser?.username || `ゲスト-${clientIdRef.current.slice(0, 4)}`,
+        sender: currentUser?.username || `Khách-${clientIdRef.current.slice(0, 4)}`,
         text,
         timestamp: Date.now()
       });
@@ -436,13 +436,13 @@ export default function Editor() {
   };
 
   const templates: Array<{ id: Slide['template']; name: string; description: string }> = [
-    { id: 'blank', name: '空白', description: '空のキャンバス' },
-    { id: 'title', name: 'タイトルのみ', description: '中央に大きなタイトル' },
-    { id: 'title-content', name: 'タイトルとコンテンツ', description: 'クラシックなレイアウト' },
-    { id: 'two-column', name: '2カラム', description: '横並びのコンテンツ' },
-    { id: 'image-text', name: '画像とテキスト', description: 'キャプション付きビジュアル' },
-    { id: 'quote', name: '引用', description: '引用を強調' },
-    { id: 'big-number', name: '大きな数字', description: '統計を強調' },
+    { id: 'blank', name: 'Trống', description: 'Canvas trống' },
+    { id: 'title', name: 'Chỉ tiêu đề', description: 'Tiêu đề lớn ở giữa' },
+    { id: 'title-content', name: 'Tiêu đề và nội dung', description: 'Bố cục cổ điển' },
+    { id: 'two-column', name: '2 cột', description: 'Nội dung cạnh nhau' },
+    { id: 'image-text', name: 'Hình ảnh và văn bản', description: 'Hình ảnh kèm chú thích' },
+    { id: 'quote', name: 'Trích dẫn', description: 'Nổi bật câu trích dẫn' },
+    { id: 'big-number', name: 'Số lớn', description: 'Nổi bật thống kê' },
   ];
 
 
@@ -454,8 +454,8 @@ export default function Editor() {
         <div className="text-center">
           <Lock className="w-12 h-12 text-slate-400 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-slate-700 mb-2">{accessDenied}</h2>
-          <p className="text-slate-500 mb-4">このプロジェクトへのアクセス権がありません。</p>
-          <Button onClick={() => navigate('/')}>ホームへ</Button>
+          <p className="text-slate-500 mb-4">Bạn không có quyền truy cập dự án này.</p>
+          <Button onClick={() => navigate('/')}>Về trang chủ</Button>
         </div>
       </div>
     );
@@ -477,7 +477,7 @@ export default function Editor() {
       <div className="h-screen flex items-center justify-center bg-slate-100">
         <div className="text-center">
           <div className="animate-spin w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-slate-600">プロジェクトを読み込み中...</p>
+          <p className="text-slate-600">Đang tải dự án...</p>
         </div>
       </div>
     );
@@ -521,10 +521,10 @@ export default function Editor() {
               >
                 {currentProject.name}
                 {!isReadOnly && <Edit3 className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />}
-                {isReadOnly && <span className="text-xs bg-slate-200 px-2 py-0.5 rounded-full text-slate-600 font-normal">閲覧のみ</span>}
+                {isReadOnly && <span className="text-xs bg-slate-200 px-2 py-0.5 rounded-full text-slate-600 font-normal">Chỉ xem</span>}
               </h1>
             )}
-            <span className="text-xs text-slate-500">たった今編集</span>
+            <span className="text-xs text-slate-500">Vừa chỉnh sửa</span>
           </div>
         </div>
 
@@ -532,12 +532,12 @@ export default function Editor() {
           {!isReadOnly && (
             <div className="relative group z-50">
               <Button variant="ghost" size="sm" className="hidden sm:flex group-hover:bg-slate-100 transition-colors" onClick={() => { }}>
-                <Download className="w-4 h-4 mr-2" /> エクスポート <ChevronDown className="w-3 h-3 ml-1 opacity-50" />
+                <Download className="w-4 h-4 mr-2" /> Xuất file <ChevronDown className="w-3 h-3 ml-1 opacity-50" />
               </Button>
               {/* Invisible padding bridge to prevent hover loss */}
               <div className="absolute right-0 top-full pt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right group-hover:translate-y-0 translate-y-1">
                 <div className="bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden p-1 ring-1 ring-black/5">
-                  <div className="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">形式を選択</div>
+                  <div className="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Chọn định dạng</div>
 
                   <button
                     onClick={() => handleExport()}
@@ -547,8 +547,8 @@ export default function Editor() {
                       <FileText className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="font-medium text-slate-900 group-hover/item:text-primary-700">PDF ドキュメント</div>
-                      <div className="text-xs text-slate-500">印刷や共有に最適</div>
+                      <div className="font-medium text-slate-900 group-hover/item:text-primary-700">Tài liệu PDF</div>
+                      <div className="text-xs text-slate-500">Phù hợp để in và chia sẻ</div>
                     </div>
                   </button>
 
@@ -565,7 +565,7 @@ export default function Editor() {
                     </div>
                     <div>
                       <div className="font-medium text-slate-900 group-hover/item:text-primary-700">PowerPoint</div>
-                      <div className="text-xs text-slate-500">編集可能なプレゼンテーション</div>
+                      <div className="text-xs text-slate-500">Bài thuyết trình có thể chỉnh sửa</div>
                     </div>
                   </button>
                 </div>
@@ -573,10 +573,10 @@ export default function Editor() {
             </div>
           )}
           <Button variant="secondary" size="sm" onClick={handleOpenShareModal}>
-            <Share2 className="w-4 h-4 mr-2" /> 共有
+            <Share2 className="w-4 h-4 mr-2" /> Chia sẻ
           </Button>
           <Button variant="primary" size="sm" onClick={() => navigate(searchParams.get('room') ? `/present/${currentProject.id}?room=${searchParams.get('room')}` : `/present/${currentProject.id}`)}>
-            <Play className="w-4 h-4 mr-2" /> プレゼンテーション
+            <Play className="w-4 h-4 mr-2" /> Trình chiếu
           </Button>
         </div>
       </header>
@@ -586,12 +586,12 @@ export default function Editor() {
         {/* Thumbnails Sidebar */}
         <aside className="w-64 bg-white border-r border-slate-200 flex flex-col z-10">
           <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
-            <h3 className="font-semibold text-slate-700">スライド</h3>
+            <h3 className="font-semibold text-slate-700">Trang chiếu</h3>
             {!isReadOnly && (
               <button
                 onClick={() => setShowTemplates(true)}
                 className="p-1.5 bg-primary-50 text-primary-600 rounded-md hover:bg-primary-100 transition-colors shadow-sm cursor-pointer"
-                title="スライドを追加"
+                title="Thêm trang chiếu"
               >
                 <Plus className="w-5 h-5" />
               </button>
@@ -650,7 +650,7 @@ export default function Editor() {
                 onClick={handleDeleteSlide}
                 className="flex items-center gap-2 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-md text-sm transition-colors"
               >
-                <Trash2 className="w-4 h-4" /> <span className="hidden sm:inline">スライド削除</span>
+                <Trash2 className="w-4 h-4" /> <span className="hidden sm:inline">Xóa trang chiếu</span>
               </button>
             )}
           </div>
@@ -662,7 +662,7 @@ export default function Editor() {
               projectId={currentProject.id}
               readOnly={isReadOnly}
               messages={messages}
-              username={currentUser?.username || `ゲスト-${clientIdRef.current.slice(0, 4)}`}
+              username={currentUser?.username || `Khách-${clientIdRef.current.slice(0, 4)}`}
               onSendMessage={handleSendMessage}
               hasUnreadMessages={hasUnreadMessages}
               onChatViewed={() => {
@@ -694,7 +694,7 @@ export default function Editor() {
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" onClick={() => setShowTemplates(false)}>
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-8 animate-slide-up max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold font-display text-slate-900">レイアウトを選択</h2>
+              <h2 className="text-2xl font-bold font-display text-slate-900">Chọn bố cục</h2>
               <button onClick={() => setShowTemplates(false)} className="p-2 hover:bg-slate-100 rounded-full text-slate-500">
                 <X className="w-6 h-6" />
               </button>
@@ -732,7 +732,7 @@ export default function Editor() {
             className="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm text-slate-700 flex items-center gap-2"
             onClick={handleDuplicateSlide}
           >
-            <Copy className="w-4 h-4" /> スライドを複製
+            <Copy className="w-4 h-4" /> Nhân bản trang chiếu
           </button>
         </div>
       )}
@@ -743,8 +743,8 @@ export default function Editor() {
           <Card className="w-full max-w-md" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h2 className="text-xl font-bold font-display text-slate-900">プロジェクトを共有</h2>
-                <p className="text-sm text-slate-500 mt-1">このプロジェクトへのアクセス権を管理します。</p>
+                <h2 className="text-xl font-bold font-display text-slate-900">Chia sẻ dự án</h2>
+                <p className="text-sm text-slate-500 mt-1">Quản lý quyền truy cập dự án này.</p>
               </div>
               <button onClick={() => setShareModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-5 h-5" />
@@ -753,7 +753,7 @@ export default function Editor() {
 
             {/* Access Mode Selection */}
             <div className="space-y-2 mb-6">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">アクセスレベル</p>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Cấp độ truy cập</p>
 
               {/* Private */}
               <button
@@ -765,8 +765,8 @@ export default function Editor() {
               >
                 <Lock className="w-5 h-5" />
                 <div className="text-left flex-1">
-                  <div className="font-medium">非公開</div>
-                  <div className="text-xs opacity-70">あなただけがアクセス可能</div>
+                  <div className="font-medium">Riêng tư</div>
+                  <div className="text-xs opacity-70">Chỉ bạn mới có thể truy cập</div>
                 </div>
               </button>
 
@@ -780,8 +780,8 @@ export default function Editor() {
               >
                 <Eye className="w-5 h-5" />
                 <div className="text-left flex-1">
-                  <div className="font-medium">リンクを知っている全員が閲覧可能</div>
-                  <div className="text-xs opacity-70">閲覧者向けの読み取り専用アクセス</div>
+                  <div className="font-medium">Mọi người có liên kết đều xem được</div>
+                  <div className="text-xs opacity-70">Chỉ đọc cho người xem</div>
                 </div>
               </button>
 
@@ -795,8 +795,8 @@ export default function Editor() {
               >
                 <Edit3 className="w-5 h-5" />
                 <div className="text-left flex-1">
-                  <div className="font-medium">リンクを知っている全員が編集可能</div>
-                  <div className="text-xs opacity-70">全員に完全な編集権限</div>
+                  <div className="font-medium">Mọi người có liên kết đều chỉnh sửa được</div>
+                  <div className="text-xs opacity-70">Toàn quyền chỉnh sửa cho mọi người</div>
                 </div>
               </button>
             </div>
@@ -804,7 +804,7 @@ export default function Editor() {
             {/* Share Link (only show if not private) */}
             {currentShareMode !== 'private' && shareLink && (
               <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">共有リンク</p>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Liên kết chia sẻ</p>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -818,7 +818,7 @@ export default function Editor() {
                     onClick={async () => {
                       if (shareLink) {
                         await navigator.clipboard.writeText(shareLink);
-                        alert('リンクをクリップボードにコピーしました！');
+                        alert('Đã sao chép liên kết!');
                       }
                     }}
                   >

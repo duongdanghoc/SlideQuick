@@ -53,7 +53,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
             ? 'bg-yellow-100/80 text-yellow-500 hover:bg-yellow-200'
             : 'bg-white/50 text-slate-400 hover:bg-white hover:text-yellow-400 opacity-0 group-hover:opacity-100'
             }`}
-          title="お気に入り"
+          title="Yêu thích"
         >
           <Star className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
         </button>

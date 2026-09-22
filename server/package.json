@@ -1,15 +1,15 @@
 {
-  "name": "slidequick-server",
+  "name": "eduart-ai-server",
   "version": "2.0.0",
-  "description": "SlideQuick backend server - Refactored with MVC architecture",
+  "description": "EduArt AI backend server - Kiến trúc MVC",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "keywords": [
-    "slidequick",
+    "eduart-ai",
     "api",
     "express",
     "sqlite"

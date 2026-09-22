@@ -60,9 +60,9 @@ export default function Trash() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold font-display text-slate-900 flex items-center gap-3">
           <Trash2 className="w-8 h-8 text-primary-600" />
-          ゴミ箱
+          Thùng rác
         </h1>
-        <p className="text-slate-500 mt-1">削除されたプロジェクトを管理します。ゴミ箱内のアイテムは30日後に完全削除されます。</p>
+        <p className="text-slate-500 mt-1">Quản lý các dự án đã xóa. Các mục trong thùng rác sẽ bị xóa vĩnh viễn sau 30 ngày.</p>
       </div>
 
       {loading ? (
@@ -74,9 +74,9 @@ export default function Trash() {
           <div className="bg-slate-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
             <Trash2 className="w-8 h-8 text-slate-400" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900">ゴミ箱は空です</h3>
+          <h3 className="text-lg font-semibold text-slate-900">Thùng rác trống</h3>
           <p className="text-slate-500 max-w-sm mx-auto mt-2">
-            削除されたプロジェクトは見つかりませんでした。
+            Không tìm thấy dự án đã xóa nào.
           </p>
         </div>
       ) : (
@@ -91,12 +91,12 @@ export default function Trash() {
                   {project.name}
                 </h3>
                 <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
-                  Deleted
+                  Đã xóa
                 </span>
               </div>
 
               <div className="text-xs text-slate-500 mb-6">
-                Deleted on: {project.deleted_at ? new Date(project.deleted_at).toLocaleDateString() : 'Unknown'}
+                Xóa ngày: {project.deleted_at ? new Date(project.deleted_at).toLocaleDateString() : 'Không rõ'}
               </div>
 
               <div className="flex gap-3">
@@ -107,7 +107,7 @@ export default function Trash() {
                   leftIcon={<RotateCcw className="w-4 h-4" />}
                   onClick={() => handleRestore(project.id)}
                 >
-                  Restore
+                  Khôi phục
                 </Button>
               </div>
             </Card>

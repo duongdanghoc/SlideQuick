@@ -11,8 +11,8 @@ async function getAllProjects(req, res) {
     const projects = projectService.getAllProjects(userId, deletedOnly);
     res.json(projects);
   } catch (error) {
-    console.error('プロジェクト取得エラー:', error);
-    res.status(500).json({ error: 'プロジェクトの取得に失敗しました' });
+    console.error('Lỗi lấy danh sách dự án:', error);
+    res.status(500).json({ error: 'Không thể lấy danh sách dự án' });
   }
 }
 
@@ -26,14 +26,14 @@ async function getProjectById(req, res) {
 
     if (!project) {
       return res.status(404).json({
-        error: 'プロジェクトが見つかりません または 権限がありません',
+        error: 'Không tìm thấy dự án hoặc không có quyền truy cập',
       });
     }
 
     res.json(project);
   } catch (error) {
-    console.error('プロジェクト取得エラー:', error);
-    res.status(500).json({ error: 'プロジェクトの取得に失敗しました' });
+    console.error('Lỗi lấy chi tiết dự án:', error);
+    res.status(500).json({ error: 'Không thể lấy thông tin dự án' });
   }
 }
 
@@ -46,8 +46,8 @@ async function createProject(req, res) {
     const project = projectService.createProject(req.body, userId);
     res.status(201).json(project);
   } catch (error) {
-    console.error('プロジェクト作成エラー:', error);
-    res.status(500).json({ error: 'プロジェクトの作成に失敗しました' });
+    console.error('Lỗi tạo dự án:', error);
+    res.status(500).json({ error: 'Không thể tạo dự án' });
   }
 }
 
@@ -61,14 +61,14 @@ async function updateProject(req, res) {
 
     if (!project) {
       return res.status(404).json({
-        error: 'プロジェクトが見つからないか権限がありません',
+        error: 'Không tìm thấy dự án hoặc không có quyền truy cập',
       });
     }
 
     res.json(project);
   } catch (error) {
-    console.error('プロジェクト更新エラー:', error);
-    res.status(500).json({ error: 'プロジェクトの更新に失敗しました' });
+    console.error('Lỗi cập nhật dự án:', error);
+    res.status(500).json({ error: 'Không thể cập nhật dự án' });
   }
 }
 
@@ -82,14 +82,14 @@ async function deleteProject(req, res) {
 
     if (!ok) {
       return res.status(404).json({
-        error: 'プロジェクトが見つからないか権限がありません',
+        error: 'Không tìm thấy dự án hoặc không có quyền truy cập',
       });
     }
 
-    res.json({ message: 'プロジェクトが削除されました' });
+    res.json({ message: 'Dự án đã được chuyển vào thùng rác' });
   } catch (error) {
-    console.error('プロジェクト削除エラー:', error);
-    res.status(500).json({ error: 'プロジェクトの削除に失敗しました' });
+    console.error('Lỗi xóa dự án:', error);
+    res.status(500).json({ error: 'Không thể xóa dự án' });
   }
 }
 
@@ -116,14 +116,14 @@ async function restoreProject(req, res) {
 
     if (!ok) {
       return res.status(404).json({
-        error: 'プロジェクトが見つからないか権限がありません',
+        error: 'Không tìm thấy dự án hoặc không có quyền truy cập',
       });
     }
 
-    res.json({ message: 'プロジェクトが復元されました' });
+    res.json({ message: 'Dự án đã được khôi phục' });
   } catch (error) {
-    console.error('プロジェクト復元エラー:', error);
-    res.status(500).json({ error: 'プロジェクトの復元に失敗しました' });
+    console.error('Lỗi khôi phục dự án:', error);
+    res.status(500).json({ error: 'Không thể khôi phục dự án' });
   }
 }
 

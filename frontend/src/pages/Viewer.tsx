@@ -45,9 +45,9 @@ export default function Viewer() {
 
         if (!response.ok) {
           if (response.status === 404) {
-            setError('プロジェクトが見つかりません');
+            setError('Không tìm thấy dự án');
           } else {
-            setError('プロジェクトの読み込みに失敗しました');
+            setError('Tải dự án thất bại');
           }
           return;
         }
@@ -58,7 +58,7 @@ export default function Viewer() {
         if (data.shareMode === 'private') {
           // Check if user is owner
           if (!currentUser || currentUser.id !== data.ownerId) {
-            setError('このプロジェクトは非公開です');
+            setError('Dự án này là riêng tư');
             return;
           }
         }
@@ -82,7 +82,7 @@ export default function Viewer() {
 
       } catch (err) {
         console.error('Error fetching project:', err);
-        setError('プロジェクトの読み込みに失敗しました');
+        setError('Tải dự án thất bại');
       } finally {
         setLoading(false);
       }
@@ -124,7 +124,7 @@ export default function Viewer() {
       await exportToPDF(project);
     } catch (err) {
       console.error('Export failed:', err);
-      alert('エクスポートに失敗しました');
+      alert('Xuất file thất bại');
     }
   };
 
@@ -133,7 +133,7 @@ export default function Viewer() {
       <div className="h-screen flex items-center justify-center bg-slate-100">
         <div className="text-center">
           <div className="animate-spin w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-slate-600">プロジェクトを読み込み中...</p>
+          <p className="text-slate-600">Đang tải dự án...</p>
         </div>
       </div>
     );
@@ -145,8 +145,8 @@ export default function Viewer() {
         <div className="text-center">
           <Lock className="w-12 h-12 text-slate-400 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-slate-700 mb-2">{error}</h2>
-          <p className="text-slate-500 mb-4">このプロジェクトへのアクセス権がありません。</p>
-          <Button onClick={() => navigate('/')}>ホームへ</Button>
+          <p className="text-slate-500 mb-4">Bạn không có quyền truy cập dự án này.</p>
+          <Button onClick={() => navigate('/')}>Về trang chủ</Button>
         </div>
       </div>
     );
@@ -164,25 +164,25 @@ export default function Viewer() {
           <button
             onClick={() => navigate('/')}
             className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-600"
-            title="ホームに戻る"
+            title="Về trang chủ"
           >
             <Home className="w-5 h-5" />
           </button>
           <div className="flex flex-col">
             <h1 className="text-lg font-bold font-display text-slate-800 flex items-center gap-2">
               {project.name}
-              <span className="text-xs bg-slate-200 px-2 py-0.5 rounded-full text-slate-600 font-normal">閲覧のみ</span>
+              <span className="text-xs bg-slate-200 px-2 py-0.5 rounded-full text-slate-600 font-normal">Chỉ xem</span>
             </h1>
-            <span className="text-xs text-slate-500">作者: {project.ownerName || '不明'}</span>
+            <span className="text-xs text-slate-500">Tác giả: {project.ownerName || 'Không rõ'}</span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" onClick={handleExport} className="hidden sm:flex">
-            <Download className="w-4 h-4 mr-2" /> PDFエクスポート
+            <Download className="w-4 h-4 mr-2" /> Xuất PDF
           </Button>
           <Button variant="primary" size="sm" onClick={() => navigate(`/present/${project.id}`)}>
-            <Play className="w-4 h-4 mr-2" /> プレゼンテーション
+            <Play className="w-4 h-4 mr-2" /> Trình chiếu
           </Button>
         </div>
       </header>

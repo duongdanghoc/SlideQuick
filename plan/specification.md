@@ -8,7 +8,7 @@ Giải pháp của chúng tôi là chuẩn hóa việc tạo slide bằng các m
 	想定ユーザ：			・	ハノイ工科大学の先生 (Giảng viên Đại học Bách Khoa Hà Nội)																			
 																								
 																								
-	Webアプリ名称：				SlideQuick（スライドクイック）																			
+	Webアプリ名称：				EduArt AI（エドゥアート AI）																			
 																								
 	機能一覧																							
 		No.	機能名					Mô tả chức năng							Mục đích của tính năng									

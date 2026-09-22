@@ -498,7 +498,7 @@ export default function SlideEditor({
             ? 'bg-primary-100 text-primary-700 hover:bg-primary-200 hover:shadow-sm cursor-pointer border border-primary-300'
             : 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
             }`}
-          title={isValid ? `スライド${slideNum}に移動` : '無効なスライド番号'}
+          title={isValid ? `Đi đến trang chiếu ${slideNum}` : 'Số trang chiếu không hợp lệ'}
         >
           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -773,7 +773,7 @@ export default function SlideEditor({
             {!slide.elements?.length && (
               <div className="absolute inset-0 pointer-events-none opacity-50 flex items-center justify-center">
                 <span className="text-slate-300 text-4xl font-bold uppercase tracking-widest border-2 border-dashed border-slate-300 p-4 rounded-xl">
-                  {slide.template === 'blank' ? '空白のキャンバス' : slide.template}
+                  {slide.template === 'blank' ? 'Canvas trống' : slide.template}
                 </span>
               </div>
             )}
@@ -894,7 +894,7 @@ export default function SlideEditor({
               onClick={() => setActiveTab('settings')}
               className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors relative ${activeTab === 'settings' ? 'text-primary-600 bg-primary-50/50' : 'text-slate-500 hover:bg-slate-50'}`}
             >
-              <Settings size={16} /> プロパティ
+              <Settings size={16} /> Thuộc tính
               {activeTab === 'settings' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600"></div>}
             </button>
             <button
@@ -907,7 +907,7 @@ export default function SlideEditor({
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
                 </span>
               )}
-              <MessageSquare size={16} /> チャット
+              <MessageSquare size={16} /> Trò chuyện
               {activeTab === 'chat' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600"></div>}
             </button>
           </div>
@@ -918,23 +918,23 @@ export default function SlideEditor({
 
               {/* Insert Section */}
               <div>
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">挿入</h3>
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Chèn</h3>
                 <div className="grid grid-cols-4 gap-2">
                   <button onClick={() => setSelectedElementId(null)} className={`p-2 rounded border flex flex-col items-center justify-center gap-1 transition-colors ${!selectedElementId ? 'bg-primary-50 border-primary-500 text-primary-700' : 'border-slate-200 text-slate-600 hover:bg-slate-50'}`} title="Select">
                     <MousePointer2 size={20} />
-                    <span className="text-[10px]">選択</span>
+                    <span className="text-[10px]">Chọn</span>
                   </button>
                   <button onClick={() => handleAddElement('text')} className="p-2 rounded border border-slate-200 text-slate-600 hover:bg-slate-50 flex flex-col items-center justify-center gap-1" title="Add Text">
                     <Type size={20} />
-                    <span className="text-[10px]">テキスト</span>
+                    <span className="text-[10px]">Văn bản</span>
                   </button>
                   <button onClick={() => handleAddElement('image')} className="p-2 rounded border border-slate-200 text-slate-600 hover:bg-slate-50 flex flex-col items-center justify-center gap-1" title="Add Image">
                     <ImageIcon size={20} />
-                    <span className="text-[10px]">画像</span>
+                    <span className="text-[10px]">Hình ảnh</span>
                   </button>
                   <button onClick={() => handleAddElement('shape')} className="p-2 rounded border border-slate-200 text-slate-600 hover:bg-slate-50 flex flex-col items-center justify-center gap-1" title="Add Shape">
                     <Square size={20} />
-                    <span className="text-[10px]">図形</span>
+                    <span className="text-[10px]">Hình dạng</span>
                   </button>
                 </div>
                 {/* Actions Row */}
@@ -946,7 +946,7 @@ export default function SlideEditor({
                     title="Duplicate (Ctrl+D)"
                   >
                     <Copy size={14} />
-                    複製
+                    Nhân bản
                   </button>
                   <button
                     onClick={handleDeleteElement}
@@ -954,7 +954,7 @@ export default function SlideEditor({
                     className={`px-2 py-1 rounded text-xs font-medium transition-colors ${selectedElementId ? 'hover:bg-red-50 text-red-500' : 'text-slate-300 cursor-not-allowed'}`}
                     title="Delete"
                   >
-                    削除
+                    Xóa
                   </button>
                 </div>
               </div>
@@ -965,7 +965,7 @@ export default function SlideEditor({
               {selectedElement ? (
                 <div>
                   <h3 className="text-xs font-bold text-primary-600 uppercase tracking-wider mb-4">
-                    {selectedElement.type === 'text' ? 'テキスト' : selectedElement.type === 'image' ? '画像' : '図形'} プロパティ
+                    {selectedElement.type === 'text' ? 'Văn bản' : selectedElement.type === 'image' ? 'Hình ảnh' : 'Hình dạng'} - Thuộc tính
                   </h3>
 
                   <div className="space-y-3">
@@ -978,7 +978,7 @@ export default function SlideEditor({
                           onBlur={handleSidebarTextBlur}
                           className="w-full text-sm p-2 bg-slate-50 border border-slate-200 rounded-md focus:ring-1 focus:ring-primary-300 outline-none resize-none"
                           rows={2}
-                          placeholder="テキストを入力..."
+                          placeholder="Nhập văn bản..."
                         />
 
                         {/* Font + Size + Color row */}
@@ -1064,26 +1064,26 @@ export default function SlideEditor({
                       <div className="space-y-3">
                         {/* Shape Type Selector */}
                         <div>
-                          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">図形</label>
+                          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Hình dạng</label>
                           <div className="flex bg-slate-50 rounded-lg p-1 border border-slate-200">
                             <button
                               onClick={() => handleElementUpdate(selectedElement.id, { style: { ...(selectedElement.style || {}), shapeType: 'rectangle' } })}
                               className={`flex-1 p-1.5 rounded flex items-center justify-center transition-all ${selectedElement.style?.shapeType === 'rectangle' || !selectedElement.style?.shapeType ? 'bg-white text-primary-600 shadow-sm border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
-                              title="正方形"
+                              title="Hình vuông"
                             >
                               <Square size={16} />
                             </button>
                             <button
                               onClick={() => handleElementUpdate(selectedElement.id, { style: { ...(selectedElement.style || {}), shapeType: 'circle' } })}
                               className={`flex-1 p-1.5 rounded flex items-center justify-center transition-all ${selectedElement.style?.shapeType === 'circle' ? 'bg-white text-primary-600 shadow-sm border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
-                              title="円"
+                              title="Hình tròn"
                             >
                               <Circle size={16} />
                             </button>
                             <button
                               onClick={() => handleElementUpdate(selectedElement.id, { style: { ...(selectedElement.style || {}), shapeType: 'triangle' } })}
                               className={`flex-1 p-1.5 rounded flex items-center justify-center transition-all ${selectedElement.style?.shapeType === 'triangle' ? 'bg-white text-primary-600 shadow-sm border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
-                              title="三角形"
+                              title="Tam giác"
                             >
                               <Triangle size={16} />
                             </button>
@@ -1092,7 +1092,7 @@ export default function SlideEditor({
 
                         {/* Fill Color */}
                         <div>
-                          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">塗りつぶし色</label>
+                          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Màu tô</label>
                           <div className="flex items-center gap-3">
                             <div
                               className="relative w-8 h-8 rounded-lg border-2 border-slate-300 overflow-hidden shrink-0 shadow-sm"
@@ -1122,7 +1122,7 @@ export default function SlideEditor({
                       <div className="space-y-3">
                         {/* File Upload Button - Compact */}
                         <div>
-                          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">画像</label>
+                          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Hình ảnh</label>
                           <label className="flex items-center gap-2 w-full p-2 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 hover:border-slate-300 transition-colors bg-white">
                             <div className="w-8 h-8 rounded bg-primary-50 flex items-center justify-center text-primary-600">
                               <ImageIcon size={16} />
@@ -1130,13 +1130,13 @@ export default function SlideEditor({
                             <div className="flex-1 min-w-0">
                               <div className="text-xs font-medium text-slate-700 truncate">
                                 {selectedElement.content === 'uploading...'
-                                  ? 'アップロード中...'
-                                  : (selectedElement.content ? '画像を変更' : '画像をアップロード')}
+                                  ? 'Đang tải lên...'
+                                  : (selectedElement.content ? 'Thay đổi hình ảnh' : 'Tải hình ảnh lên')}
                               </div>
                               <div className="text-[10px] text-slate-400 truncate">
                                 {selectedElement.content && selectedElement.content !== 'uploading...'
                                   ? selectedElement.content.split('/').pop() || 'image.png'
-                                  : 'クリックしてファイルを選択'}
+                                  : 'Chọn file để tải lên'}
                               </div>
                             </div>
                             <input
@@ -1152,7 +1152,7 @@ export default function SlideEditor({
                                   const { uploadImageToSupabase, isSupabaseConfigured } = await import('../services/supabaseStorage');
 
                                   if (!isSupabaseConfigured()) {
-                                    alert('Supabaseが構成されていません。 .envファイルにVITE_SUPABASE_URLとVITE_SUPABASE_ANON_KEYを追加してください');
+                                    alert('Supabase chưa được cấu hình. Vui lòng thêm VITE_SUPABASE_URL và VITE_SUPABASE_ANON_KEY vào file .env');
                                     return;
                                   }
 
@@ -1163,7 +1163,7 @@ export default function SlideEditor({
                                   handleElementUpdate(selectedElement.id, { content: url });
                                 } catch (err) {
                                   console.error('Upload failed:', err);
-                                  alert('画像のアップロードに失敗しました。再試行してください。');
+                                  alert('Tải hình ảnh thất bại. Vui lòng thử lại.');
                                   // Reset to placeholder
                                   handleElementUpdate(selectedElement.id, { content: '' });
                                 }
@@ -1174,7 +1174,7 @@ export default function SlideEditor({
 
                         {/* URL Input - Compact */}
                         <div>
-                          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">またはURL</label>
+                          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Hoặc URL</label>
                           <input
                             type="text"
                             value={selectedElement.content === 'uploading...' ? '' : selectedElement.content}
@@ -1198,8 +1198,8 @@ export default function SlideEditor({
                 </div>
               ) : (
                 <div className="text-center py-8 text-slate-400 bg-slate-50 rounded-lg border border-dashed border-slate-200">
-                  <p className="text-xs">要素が選択されていません</p>
-                  <p className="text-[10px] mt-1">プロパティを編集するには要素を選択してください</p>
+                  <p className="text-xs">Chưa chọn phần tử nào</p>
+                  <p className="text-[10px] mt-1">Chọn một phần tử để chỉnh sửa thuộc tính</p>
                 </div>
               )}
 
@@ -1207,7 +1207,7 @@ export default function SlideEditor({
 
               {/* Background Section */}
               <div>
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">背景</h3>
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Nền</h3>
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
                     <div
@@ -1237,7 +1237,7 @@ export default function SlideEditor({
 
               {/* Layouts Section */}
               <div>
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">レイアウト</h3>
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Bố cục</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {['blank', 'title', 'title-content', 'two-column', 'image-text', 'quote', 'big-number'].map((t) => (
                     <button
@@ -1267,8 +1267,8 @@ export default function SlideEditor({
                     <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-300">
                       <MessageSquare size={20} />
                     </div>
-                    <p className="text-sm text-slate-400">メッセージはまだありません。</p>
-                    <p className="text-xs text-slate-300">会話を始めましょう！</p>
+                    <p className="text-sm text-slate-400">Chưa có tin nhắn.</p>
+                    <p className="text-xs text-slate-300">Hãy bắt đầu cuộc trò chuyện!</p>
                   </div>
                 ) : (
                   messages.map((msg, idx) => {
@@ -1296,7 +1296,7 @@ export default function SlideEditor({
                 {showSlideAutocomplete && totalSlides > 0 && (
                   <div className="absolute bottom-full left-3 right-3 mb-2 bg-white rounded-lg shadow-xl border border-slate-200 max-h-48 overflow-y-auto z-50">
                     <div className="p-2 border-b border-slate-100 bg-slate-50">
-                      <p className="text-xs font-semibold text-slate-600">スライドを選択</p>
+                      <p className="text-xs font-semibold text-slate-600">Chọn trang chiếu</p>
                     </div>
                     <div className="py-1">
                       {Array.from({ length: totalSlides }, (_, i) => i + 1).map((slideNum) => (
@@ -1331,7 +1331,7 @@ export default function SlideEditor({
                     onBlur={() => {
                       setTimeout(() => setShowSlideAutocomplete(false), 200);
                     }}
-                    placeholder="メッセージを入力... (@でスライドをタグ)"
+                    placeholder="Nhập tin nhắn... (@ để gắn thẻ trang chiếu)"
                     className="flex-1 border border-slate-200 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-50 placeholder:text-slate-400"
                   />
                   <button

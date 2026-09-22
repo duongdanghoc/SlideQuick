@@ -94,7 +94,7 @@ export async function exportToPDF(project: Project) {
           img.style.display = "block";
           // Handle image load error placeholder
           img.onerror = () => {
-            img.src = 'https://via.placeholder.com/300x200?text=エラー';
+            img.src = 'https://via.placeholder.com/300x200?text=Loi';
           };
           elDiv.appendChild(img);
         } else {
@@ -103,7 +103,7 @@ export async function exportToPDF(project: Project) {
           elDiv.style.display = "flex";
           elDiv.style.justifyContent = "center";
           elDiv.style.alignItems = "center";
-          elDiv.innerText = "画像";
+          elDiv.innerText = "Hình ảnh";
         }
       }
       else if (el.type === "shape") {

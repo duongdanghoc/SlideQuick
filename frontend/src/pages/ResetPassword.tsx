@@ -19,7 +19,7 @@ export const ResetPassword: React.FC = () => {
 
   useEffect(() => {
     if (!token) {
-      setError("リセットトークンが無効または見つかりません。");
+      setError("Token đặt lại không hợp lệ hoặc không tìm thấy.");
     }
   }, [token]);
 
@@ -28,7 +28,7 @@ export const ResetPassword: React.FC = () => {
     if (!token) return;
 
     if (password !== confirmPassword) {
-      setError("パスワードが一致しません");
+      setError("Mật khẩu không khớp");
       return;
     }
 
@@ -46,14 +46,14 @@ export const ResetPassword: React.FC = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "パスワードのリセットに失敗しました");
+        throw new Error(data.error || "Đặt lại mật khẩu thất bại");
       }
 
-      setMessage("パスワードが正常にリセットされました。");
+      setMessage("Mật khẩu đã được đặt lại thành công.");
       // Redirect after a few seconds? Or just let them click link.
       setTimeout(() => navigate("/login"), 3000);
     } catch (err: any) {
-      setError(err.message || "エラーが発生しました");
+      setError(err.message || "Đã xảy ra lỗi");
     } finally {
       setLoading(false);
     }
@@ -67,20 +67,20 @@ export const ResetPassword: React.FC = () => {
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-12">
             <LayoutTemplate className="w-8 h-8" />
-            <span className="text-2xl font-bold font-display">スライドクイック</span>
+            <span className="text-2xl font-bold font-display">EduArt AI</span>
           </div>
           <h1 className="text-5xl font-bold font-display leading-tight mb-6">
-            アカウントを保護
+            Bảo vệ tài khoản
           </h1>
           <p className="text-primary-100 text-lg max-w-md">
-            プレゼンテーションと個人情報を保護するために強力なパスワードを作成してください。
+            Tạo mật khẩu mạnh để bảo vệ bài thuyết trình và thông tin cá nhân của bạn.
           </p>
         </div>
 
         <div className="relative z-10 flex gap-4 text-sm text-primary-100/60">
-          <span>© 2024 スライドクイック</span>
-          <span>プライバシーポリシー</span>
-          <span>利用規約</span>
+          <span>© 2024 EduArt AI</span>
+          <span>Chính sách bảo mật</span>
+          <span>Điều khoản sử dụng</span>
         </div>
       </div>
 
@@ -88,9 +88,9 @@ export const ResetPassword: React.FC = () => {
       <div className="flex items-center justify-center p-6 bg-slate-50">
         <div className="w-full max-w-md space-y-8 animate-fade-in">
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">パスワードのリセット</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Đặt lại mật khẩu</h2>
             <p className="text-slate-500">
-              新しいパスワードを以下に入力してください。
+              Nhập mật khẩu mới bên dưới.
             </p>
           </div>
 
@@ -100,20 +100,20 @@ export const ResetPassword: React.FC = () => {
                 <CheckCircle className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-semibold text-green-900">パスワードリセット完了</h3>
-                <p className="text-green-700 text-sm mt-1">ログインページにリダイレクトしています...</p>
+                <h3 className="font-semibold text-green-900">Đặt lại mật khẩu thành công</h3>
+                <p className="text-green-700 text-sm mt-1">Đang chuyển hướng đến trang đăng nhập...</p>
               </div>
               <Link
                 to="/login"
                 className="text-sm font-medium text-green-700 hover:text-green-800 underline mt-2"
               >
-                すぐにログインに戻る
+                Đăng nhập ngay
               </Link>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <Input
-                label="新しいパスワード"
+                label="Mật khẩu mới"
                 name="password"
                 type="password"
                 placeholder="••••••••"
@@ -124,7 +124,7 @@ export const ResetPassword: React.FC = () => {
                 minLength={6}
               />
               <Input
-                label="パスワード確認"
+                label="Xác nhận mật khẩu"
                 name="confirmPassword"
                 type="password"
                 placeholder="••••••••"
@@ -150,7 +150,7 @@ export const ResetPassword: React.FC = () => {
                 disabled={!token}
                 rightIcon={<ArrowRight className="w-5 h-5" />}
               >
-                パスワードのリセット
+                Đặt lại mật khẩu
               </Button>
             </form>
           )}
@@ -161,7 +161,7 @@ export const ResetPassword: React.FC = () => {
                 to="/login"
                 className="font-medium text-primary-600 hover:text-primary-700 hover:underline"
               >
-                ログインに戻る
+                Quay lại đăng nhập
               </Link>
             </div>
           )}

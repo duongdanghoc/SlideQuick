@@ -17,13 +17,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static files from uploads directory
 app.use('/uploads', express.static(uploadDir));
+app.use(
+  '/ai-image-fixtures',
+  express.static(path.join(__dirname, 'features/ai-image/fixtures')),
+);
 
 // Initialize database
 initializeDatabase();
 
 // Health check endpoint
 app.get('/', (req, res) => {
-  res.json({ message: 'SlideQuick API サーバーが動作中です 🚀' });
+  res.json({ message: 'Máy chủ EduArt AI API đang hoạt động 🚀' });
 });
 
 // API routes
@@ -31,23 +35,23 @@ app.use('/api', routes);
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ error: 'エンドポイントが見つかりません' });
+  res.status(404).json({ error: 'Không tìm thấy endpoint' });
 });
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.error('サーバーエラー:', err);
+  console.error('Lỗi máy chủ:', err);
 
   // Multer errors
-  if (err.message === '画像ファイルのみアップロード可能です') {
+  if (err.message === 'Chỉ chấp nhận tải lên các tệp hình ảnh') {
     return res.status(400).json({ error: err.message });
   }
 
   if (err.code === 'LIMIT_FILE_SIZE') {
-    return res.status(400).json({ error: 'ファイルサイズが大きすぎます (最大: 5MB)' });
+    return res.status(400).json({ error: 'Dung lượng tệp quá lớn (Tối đa: 5MB)' });
   }
 
-  res.status(500).json({ error: 'サーバー内部エラー' });
+  res.status(500).json({ error: 'Lỗi máy chủ nội bộ' });
 });
 
 module.exports = app;

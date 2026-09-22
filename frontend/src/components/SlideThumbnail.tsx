@@ -99,7 +99,7 @@ export const SlideThumbnail: React.FC<SlideThumbnailProps> = ({
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     {(!slide.elements || slide.elements.length === 0) && (
                         <span className="text-[8px] text-slate-300 uppercase tracking-wider">
-                            {slide.template === 'blank' ? '空白' : slide.template}
+                            {slide.template === 'blank' ? 'Trống' : slide.template}
                         </span>
                     )}
                 </div>

@@ -295,9 +295,9 @@ function initializeDatabase() {
       console.log('✅ Standard templates seeded.');
     }
 
-    console.log('✅ データベースが初期化されました');
+    console.log('✅ Cơ sở dữ liệu đã được khởi tạo thành công');
   } catch (error) {
-    console.error('❌ データベース初期化エラー:', error);
+    console.error('❌ Lỗi khởi tạo cơ sở dữ liệu:', error);
     throw error;
   }
 }

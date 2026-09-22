@@ -28,12 +28,12 @@ export const ForgotPassword: React.FC = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "リクエストに失敗しました");
+        throw new Error(data.error || "Yêu cầu thất bại");
       }
 
-      setMessage(data.message || "アカウントが存在する場合、メールが送信されました。");
+      setMessage(data.message || "Nếu tài khoản tồn tại, email đã được gửi.");
     } catch (err: any) {
-      setError(err.message || "リセットメールの送信に失敗しました");
+      setError(err.message || "Gửi email đặt lại mật khẩu thất bại");
     } finally {
       setLoading(false);
     }
@@ -47,20 +47,20 @@ export const ForgotPassword: React.FC = () => {
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-12">
             <LayoutTemplate className="w-8 h-8" />
-            <span className="text-2xl font-bold font-display">スライドクイック</span>
+            <span className="text-2xl font-bold font-display">EduArt AI</span>
           </div>
           <h1 className="text-5xl font-bold font-display leading-tight mb-6">
-            アカウントの復元
+            Khôi phục tài khoản
           </h1>
           <p className="text-primary-100 text-lg max-w-md">
-            心配しないでください。私たちはあなたがすぐにプレゼンテーション作成に戻れるようお手伝いします。
+            Đừng lo lắng. Chúng tôi sẽ giúp bạn quay lại tạo bài thuyết trình ngay.
           </p>
         </div>
 
         <div className="relative z-10 flex gap-4 text-sm text-primary-100/60">
-          <span>© 2024 スライドクイック</span>
-          <span>プライバシーポリシー</span>
-          <span>利用規約</span>
+          <span>© 2024 EduArt AI</span>
+          <span>Chính sách bảo mật</span>
+          <span>Điều khoản sử dụng</span>
         </div>
       </div>
 
@@ -68,9 +68,9 @@ export const ForgotPassword: React.FC = () => {
       <div className="flex items-center justify-center p-6 bg-slate-50">
         <div className="w-full max-w-md space-y-8 animate-fade-in">
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">パスワードをお忘れですか？</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Quên mật khẩu?</h2>
             <p className="text-slate-500">
-              メールアドレスを入力してください。パスワードリセット用のリンクをお送りします。
+              Nhập địa chỉ email của bạn. Chúng tôi sẽ gửi liên kết đặt lại mật khẩu.
             </p>
           </div>
 
@@ -80,20 +80,20 @@ export const ForgotPassword: React.FC = () => {
                 <CheckCircle className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-semibold text-green-900">メールを確認してください</h3>
+                <h3 className="font-semibold text-green-900">Kiểm tra email của bạn</h3>
                 <p className="text-green-700 text-sm mt-1">{message}</p>
               </div>
               <Link
                 to="/login"
                 className="text-sm font-medium text-green-700 hover:text-green-800 underline mt-2"
               >
-                ログインに戻る
+                Quay lại đăng nhập
               </Link>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <Input
-                label="メールアドレス"
+                label="Địa chỉ email"
                 name="email"
                 type="email"
                 placeholder="name@example.com"
@@ -116,19 +116,19 @@ export const ForgotPassword: React.FC = () => {
                 isLoading={loading}
                 rightIcon={<ArrowRight className="w-5 h-5" />}
               >
-                リセットリンクを送信
+                Gửi liên kết đặt lại
               </Button>
             </form>
           )}
 
           {!message && (
             <div className="text-center text-sm text-slate-600">
-              パスワードを思い出しましたか？{" "}
+              Nhớ mật khẩu rồi?{" "}
               <Link
                 to="/login"
                 className="font-medium text-primary-600 hover:text-primary-700 hover:underline"
               >
-                サインイン
+                Đăng nhập
               </Link>
             </div>
           )}

@@ -25,8 +25,8 @@ export interface ProjectTemplateConfig {
 export const SYSTEM_TEMPLATES: ProjectTemplateConfig[] = [
     {
         id: 'modern-business',
-        name: 'モダンビジネス',
-        description: 'プロフェッショナルな企業向けテンプレート。',
+        name: 'Doanh nghiệp hiện đại',
+        description: 'Mẫu chuyên nghiệp dành cho doanh nghiệp.',
         tags: ['Business', 'Corporate', 'Blue'],
         colors: ['#f8fafc', '#1e293b', '#3b82f6'],
         fontFamily: 'Inter, sans-serif',
@@ -38,51 +38,51 @@ export const SYSTEM_TEMPLATES: ProjectTemplateConfig[] = [
         },
         slides: [
             {
-                title: 'ビジネス提案書',
-                content: '革新的なソリューションの提案',
+                title: 'Đề xuất kinh doanh',
+                content: 'Đề xuất giải pháp đổi mới',
                 template: 'title',
             },
             {
-                title: 'アジェンダ',
-                content: '本日の議論内容',
+                title: 'Chương trình làm việc',
+                content: 'Nội dung thảo luận hôm nay',
                 template: 'three-column',
                 customElements: (els) => {
                     const newEls = [...els];
                     const col1 = newEls.find(e => e.role === 'col1');
-                    if (col1) col1.content = '01. 現状分析\n\n市場の課題と機会について';
+                    if (col1) col1.content = '01. Phân tích hiện trạng\n\nThách thức và cơ hội thị trường';
                     const col2 = newEls.find(e => e.role === 'col2');
-                    if (col2) col2.content = '02. 戦略提案\n\n具体的な解決策とロードマップ';
+                    if (col2) col2.content = '02. Đề xuất chiến lược\n\nGiải pháp cụ thể và lộ trình';
                     const col3 = newEls.find(e => e.role === 'col3');
-                    if (col3) col3.content = '03. 財務計画\n\n予算とROIの予測';
+                    if (col3) col3.content = '03. Kế hoạch tài chính\n\nDự toán ngân sách và ROI';
                     return newEls;
                 }
             },
             {
-                title: '市場分析',
-                content: '競合他社との比較優位性',
+                title: 'Phân tích thị trường',
+                content: 'Lợi thế cạnh tranh',
                 template: 'comparison',
             },
             {
-                title: 'プロジェクト計画',
-                content: 'タイムラインとマイルストーン',
+                title: 'Kế hoạch dự án',
+                content: 'Thời gian biểu và các mốc quan trọng',
                 template: 'section-header',
             },
             {
-                title: '主要統計',
-                content: '成長率と市場シェア',
+                title: 'Thống kê chính',
+                content: 'Tốc độ tăng trưởng và thị phần',
                 template: 'big-number',
             },
             {
-                title: 'まとめ',
-                content: 'ご清聴ありがとうございました',
+                title: 'Tóm tắt',
+                content: 'Cảm ơn quý vị đã lắng nghe',
                 template: 'title-content',
             }
         ]
     },
     {
         id: 'creative-dark',
-        name: 'クリエイティブ・ダーク',
-        description: '洗練されたダークモードのデザイン。',
+        name: 'Sáng tạo Tối màu',
+        description: 'Thiết kế chế độ tối tinh tế.',
         tags: ['Creative', 'Dark', 'Portfolio'],
         colors: ['#111827', '#f3f4f6', '#8b5cf6'],
         fontFamily: 'Roboto, sans-serif',
@@ -94,41 +94,41 @@ export const SYSTEM_TEMPLATES: ProjectTemplateConfig[] = [
         },
         slides: [
             {
-                title: 'PORTFOLIO 2024',
-                content: 'Works & Achievements',
+                title: 'HỒ SƠ NĂNG LỰC 2024',
+                content: 'Tác phẩm & Thành tựu',
                 template: 'title',
             },
             {
-                title: 'Vision',
-                content: '"デザインは機能するものでなければならない"',
+                title: 'Tầm nhìn',
+                content: '"Thiết kế phải phục vụ mục đích ứng dụng"',
                 template: 'quote',
             },
             {
-                title: 'About Me',
-                content: 'デザイナーとしての経歴',
+                title: 'Về tôi',
+                content: 'Kinh nghiệm thiết kế',
                 template: 'two-column',
             },
             {
-                title: 'Featured Works',
-                content: '最近のプロジェクト',
+                title: 'Tác phẩm tiêu biểu',
+                content: 'Các dự án gần đây',
                 template: 'grid',
             },
             {
-                title: 'Process',
-                content: '制作フロー',
+                title: 'Quy trình',
+                content: 'Quy trình sản xuất',
                 template: 'three-column',
             },
             {
-                title: 'Contact',
-                content: 'お問い合わせはこちら',
+                title: 'Liên hệ',
+                content: 'Liên hệ với chúng tôi tại đây',
                 template: 'title-content',
             }
         ]
     },
     {
         id: 'academic-clean',
-        name: 'アカデミック・クリーン',
-        description: '論文発表や講義に最適なレイアウト。',
+        name: 'Học thuật Tối giản',
+        description: 'Bố cục tối ưu cho thuyết trình báo cáo và bài giảng.',
         tags: ['Academic', 'Education', 'Simple'],
         colors: ['#ffffff', '#333333', '#059669'],
         fontFamily: 'Merriweather, serif',
@@ -140,41 +140,41 @@ export const SYSTEM_TEMPLATES: ProjectTemplateConfig[] = [
         },
         slides: [
             {
-                title: '研究発表',
-                content: 'タイトル: 持続可能な開発目標におけるAIの役割',
+                title: 'Báo cáo nghiên cứu',
+                content: 'Tên đề tài: Vai trò của AI trong các mục tiêu phát triển bền vững',
                 template: 'title',
             },
             {
-                title: '研究概要',
-                content: '本研究の目的と手法',
+                title: 'Tổng quan nghiên cứu',
+                content: 'Mục tiêu và phương pháp nghiên cứu',
                 template: 'title-content',
             },
             {
-                title: '先行研究',
-                content: '関連する文献のレビュー',
+                title: 'Nghiên cứu trước đây',
+                content: 'Tổng quan tài liệu tham khảo',
                 template: 'two-column',
             },
             {
-                title: '実験結果',
-                content: 'データ分析の結果',
+                title: 'Kết quả thử nghiệm',
+                content: 'Kết quả phân tích dữ liệu',
                 template: 'content-caption',
             },
             {
-                title: '考察',
-                content: '結果の解釈と意義',
+                title: 'Thảo luận',
+                content: 'Giải thích kết quả và ý nghĩa',
                 template: 'three-column',
             },
             {
-                title: '結論',
-                content: '今後の展望',
+                title: 'Kết luận',
+                content: 'Hướng phát triển tương lai',
                 template: 'section-header',
             }
         ]
     },
     {
         id: 'startup-pitch',
-        name: 'スタートアップ・ピッチ',
-        description: '投資家向けの力強いプレゼンテーション。',
+        name: 'Gọi vốn Startup',
+        description: 'Bài thuyết trình ấn tượng dành cho nhà đầu tư.',
         tags: ['Startup', 'Pitch', 'Bold'],
         colors: ['#fff1f2', '#881337', '#e11d48'],
         fontFamily: 'Montserrat, sans-serif',
@@ -191,36 +191,36 @@ export const SYSTEM_TEMPLATES: ProjectTemplateConfig[] = [
                 template: 'title',
             },
             {
-                title: 'The Problem',
-                content: 'What we are solving',
+                title: 'Vấn đề',
+                content: 'Vấn đề chúng tôi đang giải quyết',
                 template: 'title-content',
             },
             {
-                title: 'The Solution',
-                content: 'How we fix it',
+                title: 'Giải pháp',
+                content: 'Cách chúng tôi giải quyết',
                 template: 'image-text',
             },
             {
-                title: 'Market Size',
+                title: 'Quy mô thị trường',
                 content: 'TAM, SAM, SOM',
                 template: 'big-number',
             },
             {
-                title: 'Business Model',
-                content: 'How we make money',
+                title: 'Mô hình kinh doanh',
+                content: 'Cách chúng tôi tạo ra doanh thu',
                 template: 'grid',
             },
             {
-                title: 'Team',
-                content: 'Who we are',
+                title: 'Đội ngũ',
+                content: 'Chúng tôi là ai',
                 template: 'three-column',
             }
         ]
     },
     {
         id: 'nature-calm',
-        name: 'ネイチャー・カーム',
-        description: '自然を感じさせるアースカラー。',
+        name: 'Tự nhiên Êm dịu',
+        description: 'Tông màu tự nhiên thư thái.',
         tags: ['Nature', 'Calm', 'Green'],
         colors: ['#f0fdf4', '#14532d', '#15803d'],
         fontFamily: 'Open Sans, sans-serif',
@@ -232,33 +232,33 @@ export const SYSTEM_TEMPLATES: ProjectTemplateConfig[] = [
         },
         slides: [
             {
-                title: 'Organic Life',
-                content: 'Sustainable Living Guide',
+                title: 'Cuộc sống Hữu cơ',
+                content: 'Hướng dẫn lối sống bền vững',
                 template: 'title',
             },
             {
-                title: 'Concept',
-                content: 'Harmony with Nature',
+                title: 'Khái niệm',
+                content: 'Hòa hợp với thiên nhiên',
                 template: 'image-text',
             },
             {
-                title: 'Philosophy',
-                content: 'Our core values',
+                title: 'Triết lý',
+                content: 'Giá trị cốt lõi của chúng tôi',
                 template: 'quote',
             },
             {
-                title: 'Benefits',
-                content: 'Key advantages',
+                title: 'Lợi ích',
+                content: 'Các ưu điểm chính',
                 template: 'grid',
             },
             {
-                title: 'Products',
-                content: 'Our lineup',
+                title: 'Sản phẩm',
+                content: 'Danh mục sản phẩm',
                 template: 'three-column',
             },
             {
-                title: 'Thank You',
-                content: 'Join our community',
+                title: 'Cảm ơn',
+                content: 'Tham gia cộng đồng của chúng tôi',
                 template: 'title-content',
             }
         ]

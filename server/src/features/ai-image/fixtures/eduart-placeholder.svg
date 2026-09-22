@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title description">
+  <title id="title">EduArt generated image fixture</title>
+  <desc id="description">Deterministic placeholder used by the fake image provider.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef2ff"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#background)"/>
+  <circle cx="640" cy="315" r="128" fill="#4f46e5" opacity=".12"/>
+  <path d="M570 330h140M640 260v140" stroke="#4f46e5" stroke-width="24" stroke-linecap="round"/>
+  <text x="640" y="520" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" fill="#1e293b">EduArt image fixture</text>
+</svg>

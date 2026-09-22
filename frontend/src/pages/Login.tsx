@@ -36,10 +36,10 @@ export const Login: React.FC = () => {
         const redirectUrl = searchParams.get('redirect');
         navigate(redirectUrl || "/");
       } else {
-        setError("ユーザー名またはパスワードが無効です");
+        setError("Tên người dùng hoặc mật khẩu không hợp lệ");
       }
     } catch (err: any) {
-      setError("ログインに失敗しました");
+      setError("Đăng nhập thất bại");
     } finally {
       setLoading(false);
     }
@@ -53,20 +53,20 @@ export const Login: React.FC = () => {
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-12">
             <LayoutTemplate className="w-8 h-8" />
-            <span className="text-2xl font-bold font-display">スライドクイック</span>
+            <span className="text-2xl font-bold font-display">EduArt AI</span>
           </div>
           <h1 className="text-5xl font-bold font-display leading-tight mb-6">
-            瞬時に素晴らしい<br />プレゼンテーションを作成
+            Tạo bài thuyết trình<br />tuyệt vời trong tích tắc
           </h1>
           <p className="text-primary-100 text-lg max-w-md">
-            インテリジェントなスライド自動化プラットフォームで時間を節約しましょう
+            Tiết kiệm thời gian với nền tảng tự động hóa slide thông minh
           </p>
         </div>
 
         <div className="relative z-10 flex gap-4 text-sm text-primary-100/60">
-          <span>© 2024 スライドクイック</span>
-          <span>プライバシーポリシー</span>
-          <span>利用規約</span>
+          <span>© 2024 EduArt AI</span>
+          <span>Chính sách bảo mật</span>
+          <span>Điều khoản sử dụng</span>
         </div>
       </div>
 
@@ -74,15 +74,15 @@ export const Login: React.FC = () => {
       <div className="flex items-center justify-center p-6 bg-slate-50">
         <div className="w-full max-w-md space-y-8 animate-fade-in">
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">おかえりなさい</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Chào mừng trở lại</h2>
             <p className="text-slate-500">
-              サインインするには詳細を入力してください。
+              Nhập thông tin của bạn để đăng nhập.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <Input
-              label="ユーザー名 または メールアドレス"
+              label="Tên người dùng hoặc Email"
               name="username"
               type="text"
               placeholder="khang"
@@ -94,7 +94,7 @@ export const Login: React.FC = () => {
 
             <div className="space-y-1">
               <Input
-                label="パスワード"
+                label="Mật khẩu"
                 name="password"
                 type="password"
                 placeholder="123456"
@@ -108,7 +108,7 @@ export const Login: React.FC = () => {
                   to="/forgot-password"
                   className="text-sm font-medium text-primary-600 hover:text-primary-700 hover:underline"
                 >
-                  パスワードをお忘れですか？
+                  Quên mật khẩu?
                 </Link>
               </div>
             </div>
@@ -126,17 +126,17 @@ export const Login: React.FC = () => {
               isLoading={loading}
               rightIcon={<ArrowRight className="w-5 h-5" />}
             >
-              サインイン
+              Đăng nhập
             </Button>
           </form>
 
           <div className="text-center text-sm text-slate-600">
-            アカウントをお持ちではありませんか？{" "}
+            Chưa có tài khoản?{" "}
             <Link
               to="/register"
               className="font-medium text-primary-600 hover:text-primary-700 hover:underline"
             >
-              無料で登録
+              Đăng ký miễn phí
             </Link>
           </div>
         </div>

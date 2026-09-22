@@ -85,7 +85,7 @@ export default function Home() {
 
   const handleDeleteProject = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    if (confirm('このプロジェクトをゴミ箱に移動してもよろしいですか？')) {
+    if (confirm('Bạn có chắc muốn chuyển dự án này vào thùng rác?')) {
       await deleteProject(id);
     }
   };
@@ -200,15 +200,15 @@ export default function Home() {
     <Layout>
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold font-display text-slate-900">ダッシュボード</h1>
-          <p className="text-slate-500 mt-1">プレゼンテーションを管理・作成します</p>
+          <h1 className="text-3xl font-bold font-display text-slate-900">Bảng điều khiển</h1>
+          <p className="text-slate-500 mt-1">Quản lý và tạo bài thuyết trình</p>
         </div>
         <Button
           onClick={() => setShowModal(true)}
           leftIcon={<Plus className="w-5 h-5" />}
           className="shadow-lg shadow-primary-500/20"
         >
-          新規プロジェクト
+          Dự án mới
         </Button>
       </div>
 
@@ -216,7 +216,7 @@ export default function Home() {
       <div className="mb-6 flex gap-4">
         <div className="flex-1">
           <Input
-            placeholder="プロジェクト、レッスン名、基本情報で検索..."
+            placeholder="Tìm kiếm dự án, tên bài học, thông tin cơ bản..."
             leftIcon={<Search className="w-5 h-5" />}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -227,7 +227,7 @@ export default function Home() {
           leftIcon={<ArrowUpDown className="w-4 h-4" />}
           onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
         >
-          {sortOrder === 'desc' ? '新しい順' : '古い順'}
+          {sortOrder === 'desc' ? 'Mới nhất' : 'Cũ nhất'}
         </Button>
       </div>
 
@@ -237,14 +237,14 @@ export default function Home() {
           className={`px-6 py-3 font-medium text-sm transition-colors relative ${activeTab === 'my' ? 'text-primary-600' : 'text-slate-500 hover:text-slate-700'}`}
           onClick={() => setActiveTab('my')}
         >
-          マイプロジェクト
+          Dự án của tôi
           {activeTab === 'my' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-t-full" />}
         </button>
         <button
           className={`px-6 py-3 font-medium text-sm transition-colors relative ${activeTab === 'shared' ? 'text-primary-600' : 'text-slate-500 hover:text-slate-700'}`}
           onClick={() => setActiveTab('shared')}
         >
-          共有されたプロジェクト
+          Được chia sẻ
           {activeTab === 'shared' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-t-full" />}
         </button>
       </div>
@@ -260,16 +260,16 @@ export default function Home() {
               <Presentation className="w-8 h-8 text-primary-600" />
             </div>
             <h3 className="text-lg font-semibold text-slate-900">
-              {activeTab === 'my' ? 'プロジェクトがありません' : '共有されたプロジェクトはありません'}
+              {activeTab === 'my' ? 'Chưa có dự án nào' : 'Chưa có dự án được chia sẻ'}
             </h3>
             <p className="text-slate-500 max-w-sm mx-auto mt-2 mb-6">
               {activeTab === 'my'
-                ? 'スライドクイックを始めるには、最初のプレゼンテーションを作成してください。'
-                : '他のユーザーから共有されたプロジェクトがここに表示されます。'}
+                ? 'Để bắt đầu với EduArt AI, hãy tạo bài thuyết trình đầu tiên.'
+                : 'Các dự án được chia sẻ từ người dùng khác sẽ hiển thị ở đây.'}
             </p>
             {activeTab === 'my' && (
               <Button onClick={() => setShowModal(true)}>
-                プロジェクト作成
+                Tạo dự án
               </Button>
             )}
           </div>
@@ -314,7 +314,7 @@ export default function Home() {
                     <button
                       className="p-1.5 bg-white/90 backdrop-blur rounded-lg text-slate-600 hover:text-blue-600 shadow-sm"
                       onClick={(e) => handleShareClick(e, project)}
-                      title="共有"
+                      title="Chia sẻ"
                     >
                       <Share2 className="w-4 h-4" />
                     </button>
@@ -326,14 +326,14 @@ export default function Home() {
                         <button
                           className="p-1.5 bg-white/90 backdrop-blur rounded-lg text-slate-600 hover:text-primary-600 shadow-sm"
                           onClick={(e) => handleRenameClick(e, project)}
-                          title="名前を変更"
+                          title="Đổi tên"
                         >
                           <Edit3 className="w-4 h-4" />
                         </button>
                         <button
                           className="p-1.5 bg-white/90 backdrop-blur rounded-lg text-slate-600 hover:text-red-600 shadow-sm"
                           onClick={(e) => handleDeleteProject(e, project.id)}
-                          title="削除"
+                          title="Xóa"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -343,7 +343,7 @@ export default function Home() {
                   </div>
                   <div className="absolute bottom-3 left-3">
                     <span className="px-2 py-1 bg-white/90 backdrop-blur rounded-md text-xs font-medium text-slate-600 shadow-sm">
-                      {project.slides?.length || 0} スライド
+                      {project.slides?.length || 0} trang chiếu
                     </span>
                   </div>
                 </div>
@@ -367,7 +367,7 @@ export default function Home() {
                     <div className="flex items-center gap-1.5">
                       <User className="w-3.5 h-3.5" />
                       <span className="max-w-[100px] truncate">
-                        {project.ownerName || '不明'}
+                        {project.ownerName || 'Không rõ'}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5">
@@ -389,30 +389,30 @@ export default function Home() {
         showModal && (
           <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
             <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 animate-slide-up max-h-[90vh] overflow-y-auto">
-              <h2 className="text-xl font-bold text-slate-900 mb-1">新しいプレゼンテーション</h2>
-              <p className="text-sm text-slate-500 mb-6">新しいプレゼンテーションの詳細を入力してください。</p>
+              <h2 className="text-xl font-bold text-slate-900 mb-1">Bài thuyết trình mới</h2>
+              <p className="text-sm text-slate-500 mb-6">Nhập thông tin chi tiết cho bài thuyết trình mới.</p>
 
               <div className="space-y-4">
                 <Input
-                  label="プロジェクト名"
-                  placeholder="プロジェクト名"
+                  label="Tên dự án"
+                  placeholder="Tên dự án"
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                   autoFocus
                 />
 
                 <Input
-                  label="レッスン名"
-                  placeholder="例: レッスン1"
+                  label="Tên bài học"
+                  placeholder="Ví dụ: Bài học 1"
                   value={lessonName}
                   onChange={(e) => setLessonName(e.target.value)}
                 />
 
                 <div className="space-y-1.5">
-                  <label className="block text-sm font-medium text-slate-700">基本情報</label>
+                  <label className="block text-sm font-medium text-slate-700">Thông tin cơ bản</label>
                   <textarea
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all duration-200 resize-none h-24"
-                    placeholder="追加のコンテキスト..."
+                    placeholder="Thông tin bổ sung..."
                     value={basicInfo}
                     onChange={(e) => setBasicInfo(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleCreateProject())}
@@ -421,10 +421,10 @@ export default function Home() {
 
                 <div className="flex justify-end gap-3 mt-6">
                   <Button variant="ghost" onClick={() => setShowModal(false)}>
-                    キャンセル
+                    Hủy
                   </Button>
                   <Button onClick={handleCreateProject}>
-                    テンプレートを選択
+                    Chọn mẫu
                   </Button>
                 </div>
               </div>
@@ -438,28 +438,28 @@ export default function Home() {
         renamingProject && (
           <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" onClick={() => setRenamingProject(null)}>
             <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 animate-slide-up" onClick={e => e.stopPropagation()}>
-              <h2 className="text-xl font-bold text-slate-900 mb-4">プロジェクトを編集</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-4">Chỉnh sửa dự án</h2>
 
               <div className="space-y-4">
                 <Input
-                  label="プロジェクト名"
+                  label="Tên dự án"
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   autoFocus
                 />
 
                 <Input
-                  label="レッスン名"
+                  label="Tên bài học"
                   value={editLessonName}
                   onChange={(e) => setEditLessonName(e.target.value)}
-                  placeholder="例: レッスン1"
+                  placeholder="Ví dụ: Bài học 1"
                 />
 
                 <div className="space-y-1.5">
-                  <label className="block text-sm font-medium text-slate-700">基本情報</label>
+                  <label className="block text-sm font-medium text-slate-700">Thông tin cơ bản</label>
                   <textarea
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-slate-900 placeholder:text-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all duration-200 resize-none h-24"
-                    placeholder="追加のコンテキスト..."
+                    placeholder="Thông tin bổ sung..."
                     value={editBasicInfo}
                     onChange={(e) => setEditBasicInfo(e.target.value)}
                     onKeyDown={(e) => {
@@ -471,10 +471,10 @@ export default function Home() {
 
               <div className="flex justify-end gap-3 mt-6">
                 <Button variant="ghost" onClick={() => setRenamingProject(null)}>
-                  キャンセル
+                  Hủy
                 </Button>
                 <Button onClick={handleRenameSubmit} disabled={!editName.trim()}>
-                  保存
+                  Lưu
                 </Button>
               </div>
             </div>
@@ -490,8 +490,8 @@ export default function Home() {
               <Card>
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h2 className="text-xl font-bold font-display text-slate-900">プロジェクトを共有</h2>
-                    <p className="text-sm text-slate-500 mt-1">「<span className="font-semibold">{sharingProject.name}</span>」へのアクセス権を管理します。</p>
+                    <h2 className="text-xl font-bold font-display text-slate-900">Chia sẻ dự án</h2>
+                    <p className="text-sm text-slate-500 mt-1">Quản lý quyền truy cập cho "<span className="font-semibold">{sharingProject.name}</span>".</p>
                   </div>
                   <button type="button" onClick={() => setShareModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                     <X className="w-5 h-5" />
@@ -500,7 +500,7 @@ export default function Home() {
 
                 {/* Access Mode Selection */}
                 <div className="space-y-2 mb-6">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">アクセスレベル</p>
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Cấp độ truy cập</p>
 
                   {/* Private */}
                   <button
@@ -513,8 +513,8 @@ export default function Home() {
                   >
                     <Lock className="w-5 h-5" />
                     <div className="text-left flex-1">
-                      <div className="font-medium">非公開</div>
-                      <div className="text-xs opacity-70">あなただけがアクセス可能</div>
+                      <div className="font-medium">Riêng tư</div>
+                      <div className="text-xs opacity-70">Chỉ bạn mới có thể truy cập</div>
                     </div>
                   </button>
 
@@ -529,8 +529,8 @@ export default function Home() {
                   >
                     <Eye className="w-5 h-5" />
                     <div className="text-left flex-1">
-                      <div className="font-medium">リンクを知っている全員が閲覧可能</div>
-                      <div className="text-xs opacity-70">閲覧者向けの読み取り専用アクセス</div>
+                      <div className="font-medium">Mọi người có liên kết đều xem được</div>
+                      <div className="text-xs opacity-70">Chỉ đọc cho người xem</div>
                     </div>
                   </button>
 
@@ -545,8 +545,8 @@ export default function Home() {
                   >
                     <Edit3 className="w-5 h-5" />
                     <div className="text-left flex-1">
-                      <div className="font-medium">リンクを知っている全員が編集可能</div>
-                      <div className="text-xs opacity-70">全員に完全な編集権限</div>
+                      <div className="font-medium">Mọi người có liên kết đều chỉnh sửa được</div>
+                      <div className="text-xs opacity-70">Toàn quyền chỉnh sửa cho mọi người</div>
                     </div>
                   </button>
                 </div>
@@ -554,7 +554,7 @@ export default function Home() {
                 {/* Share Link (only show if not private) */}
                 {currentShareMode !== 'private' && (
                   <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">共有リンク</p>
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Liên kết chia sẻ</p>
                     <div className="flex gap-2">
                       <input
                         type="text"

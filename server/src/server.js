@@ -12,8 +12,8 @@ initYjsServer(server, '/yjs');
 
 // Start server
 server.listen(PORT, () => {
-  console.log(`\n🚀 SlideQuick APIサーバーが起動しました`);
+  console.log(`\n🚀 Máy chủ EduArt AI API đã khởi chạy`);
   console.log(`📍 URL: http://localhost:${PORT}`);
-  console.log(`📊 API エンドポイント: http://localhost:${PORT}/api/projects`);
+  console.log(`📊 API Endpoint: http://localhost:${PORT}/api/projects`);
   console.log(`🔄 Y.js WebSocket: ws://localhost:${PORT}/yjs\n`);
 });
