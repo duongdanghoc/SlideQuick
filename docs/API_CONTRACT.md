@@ -10,6 +10,7 @@ Headers:
 
 ```http
 Content-Type: application/json
+Authorization: Bearer <jwt>
 Idempotency-Key: <uuid>
 ```
 
@@ -156,6 +157,7 @@ Chỉ triển khai ở P1. Phải kiểm tra ownership. Trả `204 No Content`.
 | 404 | `JOB_NOT_FOUND` | Job không tồn tại |
 | 409 | `JOB_CONFLICT` | Trạng thái/idempotency xung đột |
 | 429 | `RATE_LIMITED` | Tạo quá nhiều request |
+| 429 | `DAILY_QUOTA_EXCEEDED` | Hết quota demo theo người dùng hoặc toàn hệ thống |
 | 500 | `INTERNAL_ERROR` | Lỗi hệ thống đã được làm sạch |
 | 503 | `PROVIDER_UNAVAILABLE` | Provider tạm thời không dùng được |
 

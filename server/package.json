@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "test:unit": "node --test test/features/ai-image/promptBuilder.test.js test/features/ai-image/imageProvider.test.js",
+    "test:integration": "node --test test/features/ai-image/aiImageService.test.js test/features/ai-image/aiImageApi.test.js",
+    "test:e2e": "node --test test/e2e/*.e2e.test.js"
   },
   "keywords": [
     "eduart-ai",
@@ -26,6 +29,7 @@
     "multer": "^2.0.2",
     "nodemailer": "^7.0.11",
     "nodemon": "^3.1.11",
+    "openai": "^7.23.0",
     "ws": "^8.18.3",
     "y-websocket": "^3.0.0",
     "yjs": "^13.6.27"

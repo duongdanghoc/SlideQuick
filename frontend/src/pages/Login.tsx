@@ -3,7 +3,8 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
-import { Mail, Lock, ArrowRight, LayoutTemplate } from "lucide-react";
+import { Mail, Lock, ArrowRight } from "lucide-react";
+import { BrandLogo } from "../components/ui/BrandLogo";
 
 export const Login: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -33,7 +34,7 @@ export const Login: React.FC = () => {
       const success = await login(formData.username, formData.password);
       if (success) {
         // Check for redirect URL from query param
-        const redirectUrl = searchParams.get('redirect');
+        const redirectUrl = searchParams.get("redirect");
         navigate(redirectUrl || "/");
       } else {
         setError("Tên người dùng hoặc mật khẩu không hợp lệ");
@@ -51,12 +52,11 @@ export const Login: React.FC = () => {
       <div className="hidden lg:flex flex-col justify-between bg-primary-600 p-12 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-12">
-            <LayoutTemplate className="w-8 h-8" />
-            <span className="text-2xl font-bold font-display">EduArt AI</span>
-          </div>
+          <BrandLogo className="h-28 w-auto rounded-xl mb-12" />
           <h1 className="text-5xl font-bold font-display leading-tight mb-6">
-            Tạo bài thuyết trình<br />tuyệt vời trong tích tắc
+            Giải pháp chuẩn hóa
+            <br />
+            hình ảnh Giáo dục
           </h1>
           <p className="text-primary-100 text-lg max-w-md">
             Tiết kiệm thời gian với nền tảng tự động hóa slide thông minh
@@ -73,8 +73,11 @@ export const Login: React.FC = () => {
       {/* Right: Login Form */}
       <div className="flex items-center justify-center p-6 bg-slate-50">
         <div className="w-full max-w-md space-y-8 animate-fade-in">
+          <BrandLogo className="h-24 w-auto mx-auto lg:hidden" />
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Chào mừng trở lại</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">
+              Chào mừng trở lại
+            </h2>
             <p className="text-slate-500">
               Nhập thông tin của bạn để đăng nhập.
             </p>

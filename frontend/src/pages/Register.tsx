@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
-import { Mail, Lock, User, ArrowRight, LayoutTemplate } from "lucide-react";
+import { Mail, Lock, User, ArrowRight } from "lucide-react";
+import { BrandLogo } from "../components/ui/BrandLogo";
 
 export const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -39,7 +40,7 @@ export const Register: React.FC = () => {
       const success = await register(
         formData.username,
         formData.password,
-        formData.email
+        formData.email,
       );
       if (success) {
         navigate("/");
@@ -61,24 +62,24 @@ export const Register: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/50 to-transparent"></div>
 
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-12">
-            <LayoutTemplate className="w-8 h-8 text-primary-400" />
-            <span className="text-2xl font-bold font-display">EduArt AI</span>
-          </div>
+          <BrandLogo className="h-28 w-auto rounded-xl mb-12" />
           <h1 className="text-5xl font-bold font-display leading-tight mb-6">
-            Bài thuyết trình thông minh<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-purple-400">
-              cho tương lai
-            </span>
+            Giải pháp chuẩn hóa
+            <br />
+            hình ảnh Giáo dục
           </h1>
           <div className="grid grid-cols-2 gap-8 mt-12">
             <div>
               <h3 className="text-xl font-bold mb-2">Tự động định dạng</h3>
-              <p className="text-zinc-400">Hãy để chúng tôi lo thiết kế, bạn tập trung vào nội dung.</p>
+              <p className="text-zinc-400">
+                Hãy để chúng tôi lo thiết kế, bạn tập trung vào nội dung.
+              </p>
             </div>
             <div>
               <h3 className="text-xl font-bold mb-2">Mẫu chuyên nghiệp</h3>
-              <p className="text-zinc-400">Truy cập hàng trăm mẫu cao cấp cho mọi nhu cầu.</p>
+              <p className="text-zinc-400">
+                Truy cập hàng trăm mẫu cao cấp cho mọi nhu cầu.
+              </p>
             </div>
           </div>
         </div>
@@ -87,8 +88,11 @@ export const Register: React.FC = () => {
       {/* Right: Register Form */}
       <div className="flex items-center justify-center p-6 bg-slate-50">
         <div className="w-full max-w-md space-y-8 animate-fade-in">
+          <BrandLogo className="h-24 w-auto mx-auto lg:hidden" />
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Tạo tài khoản</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">
+              Tạo tài khoản
+            </h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">

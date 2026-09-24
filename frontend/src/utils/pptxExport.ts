@@ -1,5 +1,5 @@
 import PptxGenJS from "pptxgenjs";
-import { Project, Slide, SlideElement } from "../types";
+import { Project } from "../types";
 
 /**
  * Export project to PPTX
@@ -13,7 +13,7 @@ export const exportToPPTX = async (project: Project) => {
   pptx.author = project.ownerName || "Người dùng EduArt AI";
 
   // Process each slide
-  project.slides.forEach((slide: Slide) => {
+  for (const slide of project.slides) {
     const pptxSlide = pptx.addSlide();
 
     // 1. Background Color
@@ -28,7 +28,7 @@ export const exportToPPTX = async (project: Project) => {
 
     // 2. Add Elements
     if (slide.elements) {
-      slide.elements.forEach((element: SlideElement) => {
+      for (const element of slide.elements) {
         // Calculate position and size (SlideQuick uses 960x540 base)
         // pptxgenjs uses inches by default. 960px / 96dpi = 10 inches.
         const x = element.x / 96;
@@ -60,8 +60,9 @@ export const exportToPPTX = async (project: Project) => {
         else if (element.type === "image") {
           // Check if it's a valid URL or Base64
           if (element.content) {
+            const source = await resolveImageSource(element.content);
             pptxSlide.addImage({
-              path: element.content,
+              ...source,
               x: x,
               y: y,
               w: w,
@@ -84,10 +85,31 @@ export const exportToPPTX = async (project: Project) => {
             fill: { color: element.style?.backgroundColor?.replace("#", "") || "3B82F6" },
           });
         }
-      });
+      }
     }
-  });
+  }
 
   // Save the file
   await pptx.writeFile({ fileName: `${project.name}.pptx` });
 };
+
+async function resolveImageSource(source: string): Promise<{ path?: string; data?: string }> {
+  if (source.startsWith('data:')) return { data: source };
+  if (/^https?:\/\//i.test(source) || source.startsWith('/')) {
+    const response = await fetch(source);
+    if (!response.ok) throw new Error(`Không thể tải ảnh để xuất PPTX (${response.status})`);
+    const blob = await response.blob();
+    const data = await blobToDataUrl(blob);
+    return { data };
+  }
+  return { path: source };
+}
+
+function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error || new Error('Không thể đọc dữ liệu ảnh'));
+    reader.readAsDataURL(blob);
+  });
+}

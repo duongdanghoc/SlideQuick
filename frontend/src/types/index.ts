@@ -35,6 +35,7 @@ export interface ElementStyle {
   zIndex?: number;
   lineHeight?: number;
   shapeType?: 'rectangle' | 'circle' | 'triangle'; // Shape type for shape elements
+  imageFit?: 'cover' | 'contain';
 }
 
 export interface SlideElement {

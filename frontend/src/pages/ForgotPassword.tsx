@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
-import { Mail, ArrowRight, LayoutTemplate, CheckCircle } from "lucide-react";
+import { Mail, ArrowRight, CheckCircle } from "lucide-react";
+import { BrandLogo } from "../components/ui/BrandLogo";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/api";
 
@@ -45,10 +46,7 @@ export const ForgotPassword: React.FC = () => {
       <div className="hidden lg:flex flex-col justify-between bg-primary-600 p-12 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-12">
-            <LayoutTemplate className="w-8 h-8" />
-            <span className="text-2xl font-bold font-display">EduArt AI</span>
-          </div>
+          <BrandLogo className="h-28 w-auto rounded-xl mb-12" />
           <h1 className="text-5xl font-bold font-display leading-tight mb-6">
             Khôi phục tài khoản
           </h1>
@@ -67,6 +65,7 @@ export const ForgotPassword: React.FC = () => {
       {/* Right: Form */}
       <div className="flex items-center justify-center p-6 bg-slate-50">
         <div className="w-full max-w-md space-y-8 animate-fade-in">
+          <BrandLogo className="h-24 w-auto mx-auto lg:hidden" />
           <div className="text-center lg:text-left">
             <h2 className="text-3xl font-bold text-slate-900 mb-2">Quên mật khẩu?</h2>
             <p className="text-slate-500">

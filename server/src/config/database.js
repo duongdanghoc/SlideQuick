@@ -211,6 +211,48 @@ function initializeDatabase() {
       db.exec('ALTER TABLE users ADD COLUMN default_template_id TEXT');
     }
 
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS ai_image_jobs (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        project_id TEXT,
+        slide_id TEXT,
+        idempotency_key TEXT NOT NULL,
+        source_prompt TEXT NOT NULL,
+        optimized_prompt TEXT NOT NULL,
+        options_json TEXT NOT NULL,
+        applied_rules_json TEXT NOT NULL,
+        provider TEXT NOT NULL,
+        model TEXT NOT NULL,
+        external_job_id TEXT,
+        status TEXT NOT NULL,
+        error_code TEXT,
+        created_at TEXT NOT NULL,
+        completed_at TEXT,
+        UNIQUE(user_id, idempotency_key),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      );
+      CREATE INDEX IF NOT EXISTS idx_ai_image_jobs_user_created
+        ON ai_image_jobs(user_id, created_at);
+      CREATE INDEX IF NOT EXISTS idx_ai_image_jobs_status
+        ON ai_image_jobs(status);
+      CREATE TABLE IF NOT EXISTS generated_images (
+        id TEXT PRIMARY KEY,
+        job_id TEXT NOT NULL UNIQUE,
+        user_id TEXT NOT NULL,
+        storage_key TEXT,
+        storage_url TEXT NOT NULL,
+        width INTEGER NOT NULL,
+        height INTEGER NOT NULL,
+        mime_type TEXT NOT NULL,
+        provider TEXT NOT NULL,
+        model TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        FOREIGN KEY (job_id) REFERENCES ai_image_jobs(id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      );
+    `);
+
     // Seed Standard Templates
     const existingTemplates = db.prepare('SELECT count(*) as count FROM templates WHERE is_standard = 1').get();
     if (existingTemplates.count === 0) {

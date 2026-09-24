@@ -15,6 +15,12 @@ const DIMENSIONS = Object.freeze({
   '16:9': [1280, 720],
   '3:4': [900, 1200],
 });
+const FIXTURES = Object.freeze({
+  '1:1': '/ai-image-fixtures/eduart-placeholder-1x1.svg',
+  '4:3': '/ai-image-fixtures/eduart-placeholder-4x3.svg',
+  '16:9': '/ai-image-fixtures/eduart-placeholder.svg',
+  '3:4': '/ai-image-fixtures/eduart-placeholder-3x4.svg',
+});
 const SUPPORTED_FAKE_MODES = Object.freeze(['success', 'async', 'failure']);
 
 class FakeImageProvider extends ImageProvider {
@@ -72,7 +78,7 @@ class FakeImageProvider extends ImageProvider {
       status: JOB_STATUS.COMPLETED,
       image: {
         id: `fake_img_${externalJobId.slice(-16)}`,
-        url: '/ai-image-fixtures/eduart-placeholder.svg',
+        url: FIXTURES[aspectRatio],
         width,
         height,
         mimeType: 'image/svg+xml',

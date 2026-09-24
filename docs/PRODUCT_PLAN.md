@@ -330,3 +330,13 @@ P0 chỉ bắt buộc hai endpoint job. API preview prompt riêng không bắt b
 5. Các loại `SlideElement` và pipeline save/export hiện tại hỗ trợ ảnh như thế nào.
 
 Các quyết định này không chặn việc triển khai Prompt Builder, fake provider, UI states hoặc test.
+
+## 15. Quyết định triển khai đã chốt
+
+- Hai API job tái sử dụng JWT hiện có và bắt buộc `Authorization: Bearer <token>`. Mọi thao tác đọc job phải kiểm tra `req.user.id` là chủ sở hữu.
+- Ảnh do provider thật tạo được backend upload vào Supabase Storage. Frontend không nhận service-role key và database không lưu base64.
+- Object key dùng dạng `ai-images/{userId}/{jobId}/{imageId}.{ext}`. Môi trường phát triển và fake provider có thể dùng local storage/fixture qua cùng abstraction.
+- Demo mặc định giới hạn 5 request trả phí/người/ngày và 50 request trả phí/toàn hệ thống/ngày theo múi giờ `Asia/Ho_Chi_Minh`; một job đang chạy/người và cooldown 30 giây. Fake provider không tính quota.
+- Mỗi request tạo một ảnh ở kích thước mặc định 1K. Các giới hạn được cấu hình qua biến môi trường.
+- Ảnh được chèn dưới dạng `SlideElement` hiện có với `type: image`, URL trong `content`, và `style.imageFit: contain` để không crop.
+- PDF phải tôn trọng `imageFit`; PPTX tải remote URL thành data URL trước khi gọi exporter.

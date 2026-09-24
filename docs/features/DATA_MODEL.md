@@ -36,11 +36,14 @@ id           TEXT PRIMARY KEY
 job_id       TEXT NOT NULL UNIQUE
 user_id      TEXT NULL/NOT NULL theo auth hiện có
 storage_url  TEXT NOT NULL
+storage_key  TEXT NULL
 width        INTEGER NOT NULL
 height       INTEGER NOT NULL
 mime_type    TEXT NOT NULL
 created_at   TEXT NOT NULL
 ```
+
+`storage_key` được lưu khi backend sở hữu object trong Supabase/local storage để hỗ trợ cleanup; fixture hoặc URL ngoài có thể để `NULL`.
 
 Relationship: `generated_images.job_id → ai_image_jobs.id`.
 

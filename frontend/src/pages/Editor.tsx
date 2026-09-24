@@ -1,11 +1,29 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { useApp } from '../context/AppContext';
-import { Home, Plus, Trash2, Play, Download, ChevronLeft, ChevronRight, Share2, Copy, X, Lock, Eye, Edit3, FileText, Presentation, ChevronDown } from 'lucide-react';
-import { Slide } from '../types';
-import SlideEditor from '../components/SlideEditor';
-import { SlideThumbnail } from '../components/SlideThumbnail';
-import { exportToPDF } from '../utils/pdfExport';
+import { useEffect, useState, useRef, useMemo } from "react";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useApp } from "../context/AppContext";
+import {
+  Home,
+  Plus,
+  Trash2,
+  Play,
+  Download,
+  ChevronLeft,
+  ChevronRight,
+  Share2,
+  Copy,
+  X,
+  Lock,
+  Eye,
+  Edit3,
+  FileText,
+  Presentation,
+  ChevronDown,
+  Sparkles,
+} from "lucide-react";
+import { Slide } from "../types";
+import SlideEditor from "../components/SlideEditor";
+import { SlideThumbnail } from "../components/SlideThumbnail";
+import { exportToPDF } from "../utils/pdfExport";
 import {
   connectToRoom,
   initializeProjectInRoom,
@@ -18,18 +36,40 @@ import {
   setUserAwareness,
   subscribeToAwareness,
   UserAwareness,
-} from '../services/yjs-collab';
-import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
-import '../styles/Editor.css';
+} from "../services/yjs-collab";
+import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import "../styles/Editor.css";
+import { AiImagePanel } from "../features/ai-image/AiImagePanel";
+import { resolveImageUrl, type GeneratedImage } from "../features/ai-image/api";
+import { generatedImageToSlideElement } from "../utils/generatedImageToSlideElement";
 
 export default function Editor() {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { projects, currentProject, currentSlideIndex, setCurrentProject, setCurrentSlideIndex, addSlide, deleteSlide, duplicateSlide, updateProject, currentUser, loading: authLoading, markProjectAccessed } = useApp();
+  const {
+    projects,
+    currentProject,
+    currentSlideIndex,
+    setCurrentProject,
+    setCurrentSlideIndex,
+    addSlide,
+    deleteSlide,
+    duplicateSlide,
+    updateProject,
+    updateSlide,
+    currentUser,
+    loading: authLoading,
+    markProjectAccessed,
+  } = useApp();
   const [showTemplates, setShowTemplates] = useState(false);
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; slideId: string } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+    slideId: string;
+  } | null>(null);
+  const [showAiImagePanel, setShowAiImagePanel] = useState(false);
 
   // Collaborative state
   const [shareModalOpen, setShareModalOpen] = useState(false);
@@ -39,10 +79,14 @@ export default function Editor() {
 
   const [isReadOnly, setIsReadOnly] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [otherUsersAwareness, setOtherUsersAwareness] = useState<UserAwareness[]>([]);
+  const [otherUsersAwareness, setOtherUsersAwareness] = useState<
+    UserAwareness[]
+  >([]);
 
   const roomIdRef = useRef<string | null>(null);
-  const clientIdRef = useRef<string>(crypto?.randomUUID?.() || Math.random().toString(36).slice(2, 9));
+  const clientIdRef = useRef<string>(
+    crypto?.randomUUID?.() || Math.random().toString(36).slice(2, 9),
+  );
   const projectLoadedRef = useRef(false);
   const lastYjsUpdateTime = useRef<number>(0);
   const skipNextSync = useRef(false);
@@ -51,7 +95,7 @@ export default function Editor() {
 
   // Renaming state
   const [isEditingName, setIsEditingName] = useState(false);
-  const [tempName, setTempName] = useState('');
+  const [tempName, setTempName] = useState("");
 
   // Track if user has viewed chat in this session
   const [chatViewedInSession, setChatViewedInSession] = useState(false);
@@ -61,7 +105,7 @@ export default function Editor() {
     // Wait for auth to be ready before checking access
     if (authLoading) return;
 
-    const project = projects.find(p => p.id === projectId);
+    const project = projects.find((p) => p.id === projectId);
 
     if (project) {
       // User owns this project
@@ -78,32 +122,35 @@ export default function Editor() {
 
       async function checkAccess() {
         try {
-          const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-          const response = await fetch(`${API_URL}/projects/public/${projectId}`);
+          const API_URL =
+            import.meta.env.VITE_API_URL || "http://localhost:3001/api";
+          const response = await fetch(
+            `${API_URL}/projects/public/${projectId}`,
+          );
 
           if (!response.ok) {
-            setAccessDenied('Không tìm thấy dự án');
+            setAccessDenied("Không tìm thấy dự án");
             return;
           }
 
           const data = await response.json();
 
-          if (data.shareMode === 'private') {
+          if (data.shareMode === "private") {
             // Check if logged in user is owner
             if (!currentUser || currentUser.id !== data.ownerId) {
-              setAccessDenied('Dự án này là riêng tư');
+              setAccessDenied("Dự án này là riêng tư");
               return;
             }
           }
 
-          if (data.shareMode === 'view') {
+          if (data.shareMode === "view") {
             // Redirect to viewer
             navigate(`/viewer/${projectId}`, { replace: true });
             return;
           }
 
           // shareMode is 'edit' - require login
-          if (data.shareMode === 'edit' && !currentUser) {
+          if (data.shareMode === "edit" && !currentUser) {
             // Redirect to login with return URL
             navigate(`/login?redirect=/editor/${projectId}`, { replace: true });
             return;
@@ -123,10 +170,9 @@ export default function Editor() {
           if (currentUser && projectId) {
             markProjectAccessed(projectId);
           }
-
         } catch (err) {
-          console.error('Error checking access:', err);
-          setAccessDenied('Tải dự án thất bại');
+          console.error("Error checking access:", err);
+          setAccessDenied("Tải dự án thất bại");
         }
       }
 
@@ -141,7 +187,7 @@ export default function Editor() {
   useEffect(() => {
     if (!projectId) return;
 
-    const shareRoom = searchParams.get('room');
+    const shareRoom = searchParams.get("room");
     // Use projectId as the room name for consistent collaboration
     const actualRoomId = projectId;
 
@@ -151,7 +197,9 @@ export default function Editor() {
     const timer = setTimeout(() => {
       // Only show timeout error for non-owners waiting for data
       if (!projectLoadedRef.current && !isOwner.current) {
-        setLoadingError('Đã hết thời gian tải. Vui lòng kiểm tra liên kết hoặc làm mới trang.');
+        setLoadingError(
+          "Đã hết thời gian tải. Vui lòng kiểm tra liên kết hoặc làm mới trang.",
+        );
       }
     }, 15000);
 
@@ -178,66 +226,81 @@ export default function Editor() {
             if (shareRoom) {
               const meta = getSessionMetadata(shareRoom);
               if (meta) {
-                const isSessionOwner = !!(currentUser && meta.ownerId && currentUser.id === meta.ownerId);
-                setIsReadOnly(meta.role === 'view' && !isSessionOwner);
+                const isSessionOwner = !!(
+                  currentUser &&
+                  meta.ownerId &&
+                  currentUser.id === meta.ownerId
+                );
+                setIsReadOnly(meta.role === "view" && !isSessionOwner);
               }
             }
           } catch (err) {
-            console.error('Error processing Y.js project update:', err);
+            console.error("Error processing Y.js project update:", err);
           }
         },
         (status) => {
           // Clear pending disconnect error timer on connect
-          if (status === 'connected' && disconnectTimer) {
+          if (status === "connected" && disconnectTimer) {
             clearTimeout(disconnectTimer);
             disconnectTimer = null;
           }
 
           // When owner connects and Y.js is empty, initialize with local project
-          if (status === 'connected' && isOwner.current && currentProject) {
+          if (status === "connected" && isOwner.current && currentProject) {
             // Small delay to let sync complete first
             setTimeout(() => {
               const yProject = getSessionMetadata(actualRoomId);
               // If no data in Y.js yet, initialize it
               if (!yProject) {
                 initializeProjectInRoom(actualRoomId, currentProject);
-                setSessionMetadata(actualRoomId, 'edit', currentUser?.id);
+                setSessionMetadata(actualRoomId, "edit", currentUser?.id);
               }
             }, 500);
           }
 
           // Delay showing disconnect error
-          if (status === 'disconnected' && !projectLoadedRef.current && !isOwner.current) {
+          if (
+            status === "disconnected" &&
+            !projectLoadedRef.current &&
+            !isOwner.current
+          ) {
             disconnectTimer = setTimeout(() => {
-              if (!projectLoadedRef.current && roomIdRef.current === actualRoomId) {
-                setLoadingError('Mất kết nối. Vui lòng kiểm tra mạng và thử lại.');
+              if (
+                !projectLoadedRef.current &&
+                roomIdRef.current === actualRoomId
+              ) {
+                setLoadingError(
+                  "Mất kết nối. Vui lòng kiểm tra mạng và thử lại.",
+                );
               }
             }, 1000);
           }
-        }
+        },
       );
 
       // Subscribe to chat
       try {
         chatCleanup = subscribeChatMessages(actualRoomId, setMessages);
       } catch (chatErr) {
-        console.error('Failed to subscribe to chat:', chatErr);
+        console.error("Failed to subscribe to chat:", chatErr);
       }
 
       // Subscribe to awareness (other users' selections)
       try {
         awarenessCleanup = subscribeToAwareness(actualRoomId, (users) => {
           // Filter out current user's own awareness
-          setOtherUsersAwareness(users.filter(u => u.user?.name !== currentUser?.username));
+          setOtherUsersAwareness(
+            users.filter((u) => u.user?.name !== currentUser?.username),
+          );
         });
       } catch (awarenessErr) {
-        console.error('Failed to subscribe to awareness:', awarenessErr);
+        console.error("Failed to subscribe to awareness:", awarenessErr);
       }
     } catch (err) {
-      console.error('Failed to connect to Y.js room:', err);
+      console.error("Failed to connect to Y.js room:", err);
       // Only show error for non-owners
       if (!isOwner.current) {
-        setLoadingError('Kết nối phiên cộng tác thất bại. Vui lòng thử lại.');
+        setLoadingError("Kết nối phiên cộng tác thất bại. Vui lòng thử lại.");
       }
     }
 
@@ -266,7 +329,9 @@ export default function Editor() {
   }, [currentProject, isReadOnly]);
 
   // Current share mode state
-  const [currentShareMode, setCurrentShareMode] = useState<'private' | 'view' | 'edit'>('private');
+  const [currentShareMode, setCurrentShareMode] = useState<
+    "private" | "view" | "edit"
+  >("private");
 
   // Calculate hasUnreadMessages locally for real-time updates
   const hasUnreadMessages = useMemo(() => {
@@ -278,19 +343,20 @@ export default function Editor() {
     if (!lastMessage) return false;
 
     // If we have senderId, use it
-    if ('senderId' in lastMessage && lastMessage.senderId) {
+    if ("senderId" in lastMessage && lastMessage.senderId) {
       return lastMessage.senderId !== currentUser?.id;
     }
 
     // Fallback to username comparison
-    const myUsername = currentUser?.username || `Khách-${clientIdRef.current.slice(0, 4)}`;
+    const myUsername =
+      currentUser?.username || `Khách-${clientIdRef.current.slice(0, 4)}`;
     return lastMessage.sender !== myUsername;
   }, [messages, currentUser, chatViewedInSession]);
 
   // Get the appropriate share link based on mode
-  function getShareLink(mode: 'private' | 'view' | 'edit'): string {
-    if (!currentProject) return '';
-    const basePath = mode === 'view' ? '/viewer' : '/editor';
+  function getShareLink(mode: "private" | "view" | "edit"): string {
+    if (!currentProject) return "";
+    const basePath = mode === "view" ? "/viewer" : "/editor";
     return `${window.location.origin}${basePath}/${currentProject.id}`;
   }
 
@@ -303,67 +369,73 @@ export default function Editor() {
 
     // Fetch current share mode from server
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-      const response = await fetch(`${API_URL}/projects/public/${currentProject.id}`);
+      const API_URL =
+        import.meta.env.VITE_API_URL || "http://localhost:3001/api";
+      const response = await fetch(
+        `${API_URL}/projects/public/${currentProject.id}`,
+      );
       if (response.ok) {
         const data = await response.json();
-        const mode = data.shareMode || 'private';
+        const mode = data.shareMode || "private";
         setCurrentShareMode(mode);
         setShareLink(getShareLink(mode));
       } else {
-        setCurrentShareMode('private');
-        setShareLink(getShareLink('private'));
+        setCurrentShareMode("private");
+        setShareLink(getShareLink("private"));
       }
     } catch (err) {
-      console.error('Failed to fetch share mode:', err);
-      setCurrentShareMode('private');
-      setShareLink(getShareLink('private'));
+      console.error("Failed to fetch share mode:", err);
+      setCurrentShareMode("private");
+      setShareLink(getShareLink("private"));
     }
   }
 
   // Update share mode
-  async function handleUpdateShareMode(newMode: 'private' | 'view' | 'edit') {
+  async function handleUpdateShareMode(newMode: "private" | "view" | "edit") {
     if (!currentProject) return;
 
-    const token = localStorage.getItem('sq_token');
+    const token = localStorage.getItem("sq_token");
     if (!token) {
-      setShareError('Bạn cần đăng nhập để thay đổi cài đặt chia sẻ.');
+      setShareError("Bạn cần đăng nhập để thay đổi cài đặt chia sẻ.");
       return;
     }
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+      const API_URL =
+        import.meta.env.VITE_API_URL || "http://localhost:3001/api";
 
-      const response = await fetch(`${API_URL}/projects/${currentProject.id}/share`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+      const response = await fetch(
+        `${API_URL}/projects/${currentProject.id}/share`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ shareMode: newMode }),
         },
-        body: JSON.stringify({ shareMode: newMode }),
-      });
+      );
 
       if (response.ok) {
         setCurrentShareMode(newMode);
         setShareLink(getShareLink(newMode));
         setShareError(null);
       } else if (response.status === 401) {
-        setShareError('Phiên đã hết hạn. Vui lòng đăng nhập lại.');
+        setShareError("Phiên đã hết hạn. Vui lòng đăng nhập lại.");
       } else {
         const data = await response.json();
-        setShareError(data.error || 'Cập nhật chế độ chia sẻ thất bại');
+        setShareError(data.error || "Cập nhật chế độ chia sẻ thất bại");
       }
     } catch (err) {
-      console.error('Failed to update share mode:', err);
-      setShareError('Cập nhật chế độ chia sẻ thất bại. Vui lòng thử lại.');
+      console.error("Failed to update share mode:", err);
+      setShareError("Cập nhật chế độ chia sẻ thất bại. Vui lòng thử lại.");
     }
   }
 
-
   useEffect(() => {
     const handleClickOutside = () => setContextMenu(null);
-    window.addEventListener('click', handleClickOutside);
-    return () => window.removeEventListener('click', handleClickOutside);
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
   }, []);
 
   const handleExport = async () => {
@@ -376,7 +448,7 @@ export default function Editor() {
       <div className="flex flex-col items-center justify-center h-screen bg-slate-50">
         <h2 className="text-2xl font-bold text-slate-800 mb-2">Lỗi</h2>
         <p className="text-slate-600 mb-6">{loadingError}</p>
-        <Button onClick={() => navigate('/')}>Về trang chủ</Button>
+        <Button onClick={() => navigate("/")}>Về trang chủ</Button>
       </div>
     );
   }
@@ -393,18 +465,35 @@ export default function Editor() {
   const currentSlide = slides[currentSlideIndex];
 
   if (!currentSlide) {
-    return <div className="p-8 text-center text-slate-500">Đang tải trang chiếu...</div>;
+    return (
+      <div className="p-8 text-center text-slate-500">
+        Đang tải trang chiếu...
+      </div>
+    );
   }
 
-  const handleAddSlide = async (template: Slide['template']) => {
+  const handleAddSlide = async (template: Slide["template"]) => {
     if (isReadOnly) return;
     await addSlide(currentProject.id, template);
     setShowTemplates(false);
   };
 
+  const handleInsertGeneratedImage = async (image: GeneratedImage) => {
+    const element = generatedImageToSlideElement({
+      ...image,
+      url: resolveImageUrl(image.url),
+    });
+    await updateSlide(currentProject.id, currentSlide.id, {
+      elements: [...(currentSlide.elements || []), element],
+    });
+  };
+
   const handleDeleteSlide = async () => {
     if (isReadOnly) return;
-    if (currentProject.slides.length > 1 && confirm('Bạn có chắc muốn xóa trang chiếu này?')) {
+    if (
+      currentProject.slides.length > 1 &&
+      confirm("Bạn có chắc muốn xóa trang chiếu này?")
+    ) {
       await deleteSlide(currentProject.id, currentSlide.id);
       if (currentSlideIndex >= currentProject.slides.length - 1) {
         setCurrentSlideIndex(Math.max(0, currentSlideIndex - 1));
@@ -428,24 +517,35 @@ export default function Editor() {
   const handleSendMessage = async (text: string) => {
     if (roomIdRef.current) {
       sendChatMessage(roomIdRef.current, {
-        sender: currentUser?.username || `Khách-${clientIdRef.current.slice(0, 4)}`,
+        sender:
+          currentUser?.username || `Khách-${clientIdRef.current.slice(0, 4)}`,
         text,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     }
   };
 
-  const templates: Array<{ id: Slide['template']; name: string; description: string }> = [
-    { id: 'blank', name: 'Trống', description: 'Canvas trống' },
-    { id: 'title', name: 'Chỉ tiêu đề', description: 'Tiêu đề lớn ở giữa' },
-    { id: 'title-content', name: 'Tiêu đề và nội dung', description: 'Bố cục cổ điển' },
-    { id: 'two-column', name: '2 cột', description: 'Nội dung cạnh nhau' },
-    { id: 'image-text', name: 'Hình ảnh và văn bản', description: 'Hình ảnh kèm chú thích' },
-    { id: 'quote', name: 'Trích dẫn', description: 'Nổi bật câu trích dẫn' },
-    { id: 'big-number', name: 'Số lớn', description: 'Nổi bật thống kê' },
+  const templates: Array<{
+    id: Slide["template"];
+    name: string;
+    description: string;
+  }> = [
+    { id: "blank", name: "Trống", description: "Canvas trống" },
+    { id: "title", name: "Chỉ tiêu đề", description: "Tiêu đề lớn ở giữa" },
+    {
+      id: "title-content",
+      name: "Tiêu đề và nội dung",
+      description: "Bố cục cổ điển",
+    },
+    { id: "two-column", name: "2 cột", description: "Nội dung cạnh nhau" },
+    {
+      id: "image-text",
+      name: "Hình ảnh và văn bản",
+      description: "Hình ảnh kèm chú thích",
+    },
+    { id: "quote", name: "Trích dẫn", description: "Nổi bật câu trích dẫn" },
+    { id: "big-number", name: "Số lớn", description: "Nổi bật thống kê" },
   ];
-
-
 
   // Access denied screen
   if (accessDenied) {
@@ -453,9 +553,13 @@ export default function Editor() {
       <div className="h-screen flex items-center justify-center bg-slate-100">
         <div className="text-center">
           <Lock className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-slate-700 mb-2">{accessDenied}</h2>
-          <p className="text-slate-500 mb-4">Bạn không có quyền truy cập dự án này.</p>
-          <Button onClick={() => navigate('/')}>Về trang chủ</Button>
+          <h2 className="text-xl font-bold text-slate-700 mb-2">
+            {accessDenied}
+          </h2>
+          <p className="text-slate-500 mb-4">
+            Bạn không có quyền truy cập dự án này.
+          </p>
+          <Button onClick={() => navigate("/")}>Về trang chủ</Button>
         </div>
       </div>
     );
@@ -465,7 +569,7 @@ export default function Editor() {
     if (tempName.trim() && tempName !== currentProject.name) {
       await updateProject({
         ...currentProject,
-        name: tempName.trim()
+        name: tempName.trim(),
       });
     }
     setIsEditingName(false);
@@ -489,7 +593,7 @@ export default function Editor() {
       <header className="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center px-4 justify-between z-20 shadow-sm">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-600"
             title="Back to Home"
           >
@@ -503,15 +607,15 @@ export default function Editor() {
                 onChange={(e) => setTempName(e.target.value)}
                 onBlur={handleNameSave}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleNameSave();
-                  if (e.key === 'Escape') setIsEditingName(false);
+                  if (e.key === "Enter") handleNameSave();
+                  if (e.key === "Escape") setIsEditingName(false);
                 }}
                 autoFocus
                 className="text-lg font-bold font-display text-slate-800 bg-white border border-primary-300 rounded px-2 py-0.5 outline-none focus:ring-2 focus:ring-primary-500/50"
               />
             ) : (
               <h1
-                className={`text-lg font-bold font-display text-slate-800 flex items-center gap-2 ${!isReadOnly ? 'cursor-pointer hover:bg-slate-100 rounded px-2 -ml-2 py-0.5 transition-colors group' : ''}`}
+                className={`text-lg font-bold font-display text-slate-800 flex items-center gap-2 ${!isReadOnly ? "cursor-pointer hover:bg-slate-100 rounded px-2 -ml-2 py-0.5 transition-colors group" : ""}`}
                 onClick={() => {
                   if (!isReadOnly) {
                     setTempName(currentProject.name);
@@ -520,8 +624,14 @@ export default function Editor() {
                 }}
               >
                 {currentProject.name}
-                {!isReadOnly && <Edit3 className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />}
-                {isReadOnly && <span className="text-xs bg-slate-200 px-2 py-0.5 rounded-full text-slate-600 font-normal">Chỉ xem</span>}
+                {!isReadOnly && (
+                  <Edit3 className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                )}
+                {isReadOnly && (
+                  <span className="text-xs bg-slate-200 px-2 py-0.5 rounded-full text-slate-600 font-normal">
+                    Chỉ xem
+                  </span>
+                )}
               </h1>
             )}
             <span className="text-xs text-slate-500">Vừa chỉnh sửa</span>
@@ -531,13 +641,21 @@ export default function Editor() {
         <div className="flex items-center gap-3">
           {!isReadOnly && (
             <div className="relative group z-50">
-              <Button variant="ghost" size="sm" className="hidden sm:flex group-hover:bg-slate-100 transition-colors" onClick={() => { }}>
-                <Download className="w-4 h-4 mr-2" /> Xuất file <ChevronDown className="w-3 h-3 ml-1 opacity-50" />
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hidden sm:flex group-hover:bg-slate-100 transition-colors"
+                onClick={() => {}}
+              >
+                <Download className="w-4 h-4 mr-2" /> Xuất file{" "}
+                <ChevronDown className="w-3 h-3 ml-1 opacity-50" />
               </Button>
               {/* Invisible padding bridge to prevent hover loss */}
               <div className="absolute right-0 top-full pt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right group-hover:translate-y-0 translate-y-1">
                 <div className="bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden p-1 ring-1 ring-black/5">
-                  <div className="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Chọn định dạng</div>
+                  <div className="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Chọn định dạng
+                  </div>
 
                   <button
                     onClick={() => handleExport()}
@@ -547,15 +665,20 @@ export default function Editor() {
                       <FileText className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="font-medium text-slate-900 group-hover/item:text-primary-700">Tài liệu PDF</div>
-                      <div className="text-xs text-slate-500">Phù hợp để in và chia sẻ</div>
+                      <div className="font-medium text-slate-900 group-hover/item:text-primary-700">
+                        Tài liệu PDF
+                      </div>
+                      <div className="text-xs text-slate-500">
+                        Phù hợp để in và chia sẻ
+                      </div>
                     </div>
                   </button>
 
                   <button
                     onClick={async () => {
                       if (!currentProject) return;
-                      const { exportToPPTX } = await import('../utils/pptxExport');
+                      const { exportToPPTX } =
+                        await import("../utils/pptxExport");
                       await exportToPPTX(currentProject);
                     }}
                     className="w-full text-left px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-primary-600 rounded-lg flex items-center gap-3 transition-colors group/item"
@@ -564,8 +687,12 @@ export default function Editor() {
                       <Presentation className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="font-medium text-slate-900 group-hover/item:text-primary-700">PowerPoint</div>
-                      <div className="text-xs text-slate-500">Bài thuyết trình có thể chỉnh sửa</div>
+                      <div className="font-medium text-slate-900 group-hover/item:text-primary-700">
+                        PowerPoint
+                      </div>
+                      <div className="text-xs text-slate-500">
+                        Bài thuyết trình có thể chỉnh sửa
+                      </div>
                     </div>
                   </button>
                 </div>
@@ -575,7 +702,17 @@ export default function Editor() {
           <Button variant="secondary" size="sm" onClick={handleOpenShareModal}>
             <Share2 className="w-4 h-4 mr-2" /> Chia sẻ
           </Button>
-          <Button variant="primary" size="sm" onClick={() => navigate(searchParams.get('room') ? `/present/${currentProject.id}?room=${searchParams.get('room')}` : `/present/${currentProject.id}`)}>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() =>
+              navigate(
+                searchParams.get("room")
+                  ? `/present/${currentProject.id}?room=${searchParams.get("room")}`
+                  : `/present/${currentProject.id}`,
+              )
+            }
+          >
             <Play className="w-4 h-4 mr-2" /> Trình chiếu
           </Button>
         </div>
@@ -602,19 +739,26 @@ export default function Editor() {
             {currentProject.slides.map((slide, index) => (
               <div
                 key={slide.id}
-                className={`group relative rounded-lg border-2 transition-all duration-200 cursor-pointer overflow-hidden ${index === currentSlideIndex
-                  ? 'border-primary-500 shadow-md ring-2 ring-primary-100 transform scale-[1.02]'
-                  : 'border-transparent hover:border-slate-300 hover:shadow-sm bg-white'
-                  }`}
+                className={`group relative rounded-lg border-2 transition-all duration-200 cursor-pointer overflow-hidden ${
+                  index === currentSlideIndex
+                    ? "border-primary-500 shadow-md ring-2 ring-primary-100 transform scale-[1.02]"
+                    : "border-transparent hover:border-slate-300 hover:shadow-sm bg-white"
+                }`}
                 onClick={() => setCurrentSlideIndex(index)}
-                onContextMenu={(e) => { if (!isReadOnly) handleContextMenu(e, slide.id); }}
+                onContextMenu={(e) => {
+                  if (!isReadOnly) handleContextMenu(e, slide.id);
+                }}
               >
                 <div className="absolute left-2 top-2 z-10 w-6 h-6 flex items-center justify-center bg-black/50 text-white text-xs font-bold rounded-full shadow-sm backdrop-blur-sm">
                   {index + 1}
                 </div>
                 {/* Mini Slide Preview using SlideThumbnail */}
                 <div className="aspect-video w-full relative">
-                  <SlideThumbnail slide={slide} scale={0.24} className="w-full h-full" />
+                  <SlideThumbnail
+                    slide={slide}
+                    scale={0.24}
+                    className="w-full h-full"
+                  />
                 </div>
               </div>
             ))}
@@ -622,13 +766,15 @@ export default function Editor() {
         </aside>
 
         {/* Editor Stage */}
-        <main className="flex-1 flex flex-col relative bg-slate-100/50">
+        <main className="min-w-0 flex-1 flex flex-col relative bg-slate-100/50">
           {/* Canvas Toolbar */}
           <div className="h-12 bg-white border-b border-slate-200 flex items-center px-4 justify-between">
             <div className="flex items-center gap-2">
               <button
                 className="p-1.5 hover:bg-slate-100 rounded text-slate-600 disabled:opacity-30"
-                onClick={() => setCurrentSlideIndex(Math.max(0, currentSlideIndex - 1))}
+                onClick={() =>
+                  setCurrentSlideIndex(Math.max(0, currentSlideIndex - 1))
+                }
                 disabled={currentSlideIndex === 0}
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -638,20 +784,40 @@ export default function Editor() {
               </span>
               <button
                 className="p-1.5 hover:bg-slate-100 rounded text-slate-600 disabled:opacity-30"
-                onClick={() => setCurrentSlideIndex(Math.min(currentProject.slides.length - 1, currentSlideIndex + 1))}
-                disabled={currentSlideIndex === currentProject.slides.length - 1}
+                onClick={() =>
+                  setCurrentSlideIndex(
+                    Math.min(
+                      currentProject.slides.length - 1,
+                      currentSlideIndex + 1,
+                    ),
+                  )
+                }
+                disabled={
+                  currentSlideIndex === currentProject.slides.length - 1
+                }
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
 
             {!isReadOnly && (
-              <button
-                onClick={handleDeleteSlide}
-                className="flex items-center gap-2 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-md text-sm transition-colors"
-              >
-                <Trash2 className="w-4 h-4" /> <span className="hidden sm:inline">Xóa trang chiếu</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowAiImagePanel((value) => !value)}
+                  className="flex items-center gap-2 text-primary-700 hover:bg-primary-50 px-3 py-1.5 rounded-md text-sm transition-colors"
+                  aria-expanded={showAiImagePanel}
+                >
+                  <Sparkles className="w-4 h-4" />{" "}
+                  <span className="hidden sm:inline">Ảnh AI</span>
+                </button>
+                <button
+                  onClick={handleDeleteSlide}
+                  className="flex items-center gap-2 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-md text-sm transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />{" "}
+                  <span className="hidden sm:inline">Xóa trang chiếu</span>
+                </button>
+              </div>
             )}
           </div>
 
@@ -662,7 +828,10 @@ export default function Editor() {
               projectId={currentProject.id}
               readOnly={isReadOnly}
               messages={messages}
-              username={currentUser?.username || `Khách-${clientIdRef.current.slice(0, 4)}`}
+              username={
+                currentUser?.username ||
+                `Khách-${clientIdRef.current.slice(0, 4)}`
+              }
               onSendMessage={handleSendMessage}
               hasUnreadMessages={hasUnreadMessages}
               onChatViewed={() => {
@@ -678,30 +847,51 @@ export default function Editor() {
                     roomIdRef.current,
                     currentUser.username,
                     elementId,
-                    currentSlide.id
+                    currentSlide.id,
                   );
                 }
               }}
-              onSlideJump={(slideIndex: number) => setCurrentSlideIndex(slideIndex)}
+              onSlideJump={(slideIndex: number) =>
+                setCurrentSlideIndex(slideIndex)
+              }
               totalSlides={currentProject.slides.length}
             />
           </div>
         </main>
+        {showAiImagePanel && !isReadOnly ? (
+          <AiImagePanel
+            projectId={currentProject.id}
+            slideId={currentSlide.id}
+            onClose={() => setShowAiImagePanel(false)}
+            onInsert={handleInsertGeneratedImage}
+          />
+        ) : null}
       </div>
 
       {/* Templates Modal */}
       {showTemplates && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" onClick={() => setShowTemplates(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-8 animate-slide-up max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setShowTemplates(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-8 animate-slide-up max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold font-display text-slate-900">Chọn bố cục</h2>
-              <button onClick={() => setShowTemplates(false)} className="p-2 hover:bg-slate-100 rounded-full text-slate-500">
+              <h2 className="text-2xl font-bold font-display text-slate-900">
+                Chọn bố cục
+              </h2>
+              <button
+                onClick={() => setShowTemplates(false)}
+                className="p-2 hover:bg-slate-100 rounded-full text-slate-500"
+              >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {templates.map(template => (
+              {templates.map((template) => (
                 <div
                   key={template.id}
                   className="group cursor-pointer"
@@ -710,10 +900,16 @@ export default function Editor() {
                   <div className="aspect-video bg-slate-100 rounded-lg border-2 border-transparent group-hover:border-primary-500 group-hover:shadow-lg transition-all mb-3 flex items-center justify-center overflow-hidden relative">
                     {/* Preview Placeholder */}
                     <div className="absolute inset-0 bg-white opacity-50"></div>
-                    <span className="relative z-10 text-slate-400 font-medium text-xs uppercase tracking-wider">{template.name}</span>
+                    <span className="relative z-10 text-slate-400 font-medium text-xs uppercase tracking-wider">
+                      {template.name}
+                    </span>
                   </div>
-                  <h3 className="font-semibold text-slate-800 text-center group-hover:text-primary-600 transition-colors">{template.name}</h3>
-                  <p className="text-xs text-slate-500 text-center mt-1">{template.description}</p>
+                  <h3 className="font-semibold text-slate-800 text-center group-hover:text-primary-600 transition-colors">
+                    {template.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 text-center mt-1">
+                    {template.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -739,72 +935,102 @@ export default function Editor() {
 
       {/* Share Modal */}
       {shareModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShareModalOpen(false)}>
-          <Card className="w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShareModalOpen(false)}
+        >
+          <Card
+            className="w-full max-w-md"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h2 className="text-xl font-bold font-display text-slate-900">Chia sẻ dự án</h2>
-                <p className="text-sm text-slate-500 mt-1">Quản lý quyền truy cập dự án này.</p>
+                <h2 className="text-xl font-bold font-display text-slate-900">
+                  Chia sẻ dự án
+                </h2>
+                <p className="text-sm text-slate-500 mt-1">
+                  Quản lý quyền truy cập dự án này.
+                </p>
               </div>
-              <button onClick={() => setShareModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+              <button
+                onClick={() => setShareModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Access Mode Selection */}
             <div className="space-y-2 mb-6">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Cấp độ truy cập</p>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Cấp độ truy cập
+              </p>
 
               {/* Private */}
               <button
-                className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all ${currentShareMode === 'private'
-                  ? 'border-primary-500 bg-primary-50 text-primary-700'
-                  : 'border-slate-200 hover:border-slate-300 text-slate-600'
-                  }`}
-                onClick={() => handleUpdateShareMode('private')}
+                className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all ${
+                  currentShareMode === "private"
+                    ? "border-primary-500 bg-primary-50 text-primary-700"
+                    : "border-slate-200 hover:border-slate-300 text-slate-600"
+                }`}
+                onClick={() => handleUpdateShareMode("private")}
               >
                 <Lock className="w-5 h-5" />
                 <div className="text-left flex-1">
                   <div className="font-medium">Riêng tư</div>
-                  <div className="text-xs opacity-70">Chỉ bạn mới có thể truy cập</div>
+                  <div className="text-xs opacity-70">
+                    Chỉ bạn mới có thể truy cập
+                  </div>
                 </div>
               </button>
 
               {/* View Only */}
               <button
-                className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all ${currentShareMode === 'view'
-                  ? 'border-primary-500 bg-primary-50 text-primary-700'
-                  : 'border-slate-200 hover:border-slate-300 text-slate-600'
-                  }`}
-                onClick={() => handleUpdateShareMode('view')}
+                className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all ${
+                  currentShareMode === "view"
+                    ? "border-primary-500 bg-primary-50 text-primary-700"
+                    : "border-slate-200 hover:border-slate-300 text-slate-600"
+                }`}
+                onClick={() => handleUpdateShareMode("view")}
               >
                 <Eye className="w-5 h-5" />
                 <div className="text-left flex-1">
-                  <div className="font-medium">Mọi người có liên kết đều xem được</div>
-                  <div className="text-xs opacity-70">Chỉ đọc cho người xem</div>
+                  <div className="font-medium">
+                    Mọi người có liên kết đều xem được
+                  </div>
+                  <div className="text-xs opacity-70">
+                    Chỉ đọc cho người xem
+                  </div>
                 </div>
               </button>
 
               {/* Can Edit */}
               <button
-                className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all ${currentShareMode === 'edit'
-                  ? 'border-primary-500 bg-primary-50 text-primary-700'
-                  : 'border-slate-200 hover:border-slate-300 text-slate-600'
-                  }`}
-                onClick={() => handleUpdateShareMode('edit')}
+                className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all ${
+                  currentShareMode === "edit"
+                    ? "border-primary-500 bg-primary-50 text-primary-700"
+                    : "border-slate-200 hover:border-slate-300 text-slate-600"
+                }`}
+                onClick={() => handleUpdateShareMode("edit")}
               >
                 <Edit3 className="w-5 h-5" />
                 <div className="text-left flex-1">
-                  <div className="font-medium">Mọi người có liên kết đều chỉnh sửa được</div>
-                  <div className="text-xs opacity-70">Toàn quyền chỉnh sửa cho mọi người</div>
+                  <div className="font-medium">
+                    Mọi người có liên kết đều chỉnh sửa được
+                  </div>
+                  <div className="text-xs opacity-70">
+                    Toàn quyền chỉnh sửa cho mọi người
+                  </div>
                 </div>
               </button>
             </div>
 
             {/* Share Link (only show if not private) */}
-            {currentShareMode !== 'private' && shareLink && (
+            {currentShareMode !== "private" && shareLink && (
               <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Liên kết chia sẻ</p>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                  Liên kết chia sẻ
+                </p>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -818,7 +1044,7 @@ export default function Editor() {
                     onClick={async () => {
                       if (shareLink) {
                         await navigator.clipboard.writeText(shareLink);
-                        alert('Đã sao chép liên kết!');
+                        alert("Đã sao chép liên kết!");
                       }
                     }}
                   >

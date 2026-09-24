@@ -13,5 +13,6 @@ router.use('/', authRoutes); // /register and /login
 router.use('/upload', uploadRoutes);
 router.use('/share', shareRoutes);
 router.use('/templates', require('./templateRoutes'));
+router.use('/ai-images', require('./aiImageRoutes'));
 
 module.exports = router;

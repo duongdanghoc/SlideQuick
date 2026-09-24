@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { SlideElement } from '../types';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { SlideElement } from "../types";
 
 interface DraggableElementProps {
   element: SlideElement;
@@ -43,22 +43,25 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
   }, [element.content]);
 
   // Debounced text sync handler
-  const handleTextChange = useCallback((newText: string) => {
-    // Update local state immediately for smooth typing
-    setLocalText(newText);
-    isTypingRef.current = true;
+  const handleTextChange = useCallback(
+    (newText: string) => {
+      // Update local state immediately for smooth typing
+      setLocalText(newText);
+      isTypingRef.current = true;
 
-    // Clear existing timeout
-    if (textSyncTimeoutRef.current) {
-      clearTimeout(textSyncTimeoutRef.current);
-    }
+      // Clear existing timeout
+      if (textSyncTimeoutRef.current) {
+        clearTimeout(textSyncTimeoutRef.current);
+      }
 
-    // Debounce the parent state update
-    textSyncTimeoutRef.current = setTimeout(() => {
-      isTypingRef.current = false;
-      onChange(element.id, { content: newText });
-    }, TEXT_SYNC_DEBOUNCE);
-  }, [element.id, onChange]);
+      // Debounce the parent state update
+      textSyncTimeoutRef.current = setTimeout(() => {
+        isTypingRef.current = false;
+        onChange(element.id, { content: newText });
+      }, TEXT_SYNC_DEBOUNCE);
+    },
+    [element.id, onChange],
+  );
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -92,7 +95,12 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
 
   // Refs for tracking values inside event listeners without re-binding
   const dragStartRef = useRef<{ x: number; y: number } | null>(null);
-  const elementStartRef = useRef<{ x: number; y: number; w: number; h: number } | null>(null);
+  const elementStartRef = useRef<{
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  } | null>(null);
   const dragOffsetRef = useRef({ x: 0, y: 0 }); // Track latest drag offset
   const resizeOffsetRef = useRef({ x: 0, y: 0, w: 0, h: 0 }); // Track latest resize offset
 
@@ -106,19 +114,24 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
   // Handle Dragging
   const handleMouseDown = (e: React.MouseEvent) => {
     if (readOnly) return;
-    if ((e.target as HTMLElement).classList.contains('resize-handle')) return;
-    if (isEditing && element.type === 'text') return;
+    if ((e.target as HTMLElement).classList.contains("resize-handle")) return;
+    if (isEditing && element.type === "text") return;
 
     e.stopPropagation();
-    console.log('DraggableElement: onSelect', element.id);
+    console.log("DraggableElement: onSelect", element.id);
     onSelect(element.id);
-    console.log('DraggableElement: setIsDragging(true)');
+    console.log("DraggableElement: setIsDragging(true)");
     setIsDragging(true);
-    console.log('DraggableElement: onDragStateChange(true)');
+    console.log("DraggableElement: onDragStateChange(true)");
     onDragStateChange?.(true, element.id);
 
     dragStartRef.current = { x: e.clientX, y: e.clientY };
-    elementStartRef.current = { x: element.x, y: element.y, w: element.width, h: element.height };
+    elementStartRef.current = {
+      x: element.x,
+      y: element.y,
+      w: element.width,
+      h: element.height,
+    };
 
     dragOffsetRef.current = { x: 0, y: 0 };
   };
@@ -126,7 +139,7 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
   const handleDoubleClick = (e: React.MouseEvent) => {
     if (readOnly) return;
     e.stopPropagation();
-    if (element.type === 'text') {
+    if (element.type === "text") {
       setIsEditing(true);
     }
   };
@@ -138,7 +151,12 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
     setResizeHandle(handle);
 
     dragStartRef.current = { x: e.clientX, y: e.clientY };
-    elementStartRef.current = { x: element.x, y: element.y, w: element.width, h: element.height };
+    elementStartRef.current = {
+      x: element.x,
+      y: element.y,
+      w: element.width,
+      h: element.height,
+    };
     setResizeOffset({ x: 0, y: 0, w: 0, h: 0 });
     resizeOffsetRef.current = { x: 0, y: 0, w: 0, h: 0 };
   };
@@ -182,25 +200,33 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
         // Screen updates are handled via setDragOffset (local) and activeGuides (parent state via onDrag)
       } else if (isResizing && elementStartRef.current) {
         const { w, h } = elementStartRef.current;
-        let offsetX = 0, offsetY = 0, offsetW = 0, offsetH = 0;
+        let offsetX = 0,
+          offsetY = 0,
+          offsetW = 0,
+          offsetH = 0;
 
-        if (resizeHandle?.includes('e')) offsetW = dx;
-        if (resizeHandle?.includes('w')) {
+        if (resizeHandle?.includes("e")) offsetW = dx;
+        if (resizeHandle?.includes("w")) {
           const deltaW = Math.min(w - 20, dx);
           offsetX = deltaW;
           offsetW = -deltaW;
         }
-        if (resizeHandle?.includes('s')) offsetH = dy;
-        if (resizeHandle?.includes('n')) {
+        if (resizeHandle?.includes("s")) offsetH = dy;
+        if (resizeHandle?.includes("n")) {
           const deltaH = Math.min(h - 20, dy);
           offsetY = deltaH;
           offsetH = -deltaH;
         }
 
-        resizeOffsetRef.current = { x: offsetX, y: offsetY, w: offsetW, h: offsetH };
+        resizeOffsetRef.current = {
+          x: offsetX,
+          y: offsetY,
+          w: offsetW,
+          h: offsetH,
+        };
         setResizeOffset({ x: offsetX, y: offsetY, w: offsetW, h: offsetH });
 
-        // For resize, we might still want immediate feedback in parent if needed, 
+        // For resize, we might still want immediate feedback in parent if needed,
         // but for now let's keep it consistent: visual only
       }
     };
@@ -213,7 +239,7 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
 
         // Reset transform before commit
         if (elementRef.current) {
-          elementRef.current.style.transform = '';
+          elementRef.current.style.transform = "";
         }
 
         onChange(element.id, { x: finalX, y: finalY });
@@ -241,12 +267,12 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
       resizeOffsetRef.current = { x: 0, y: 0, w: 0, h: 0 };
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [
     isDragging,
@@ -256,7 +282,7 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
     zoomScale,
     onChange,
     onDrag,
-    onDragStateChange
+    onDragStateChange,
   ]);
 
   // Calculate visual position (element position + drag offset)
@@ -267,16 +293,19 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
   const visualH = element.height + (isResizing ? resizeOffset.h : 0);
 
   const styles: React.CSSProperties = {
-    position: 'absolute',
+    position: "absolute",
     left: visualX,
     top: visualY,
     width: Math.max(20, visualW),
     height: Math.max(20, visualH),
-    cursor: isDragging ? 'grabbing' : (readOnly ? 'default' : 'grab'),
-    border: isSelected && !readOnly ? '2px solid #3b82f6' : element.style?.border || '1px solid transparent',
-    boxSizing: 'border-box',
-    userSelect: isEditing ? 'text' : 'none',
-    willChange: isDragging || isResizing ? 'left, top, width, height' : 'auto',
+    cursor: isDragging ? "grabbing" : readOnly ? "default" : "grab",
+    border:
+      isSelected && !readOnly
+        ? "2px solid #3b82f6"
+        : element.style?.border || "1px solid transparent",
+    boxSizing: "border-box",
+    userSelect: isEditing ? "text" : "none",
+    willChange: isDragging || isResizing ? "left, top, width, height" : "auto",
     zIndex: element.style?.zIndex ?? 0,
   };
 
@@ -287,10 +316,13 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
       style={styles}
       onMouseDown={handleMouseDown}
       onDoubleClick={handleDoubleClick}
-      onClick={(e) => { e.stopPropagation(); onSelect(element.id); }}
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect(element.id);
+      }}
     >
       {/* Content Rendering */}
-      {element.type === 'text' && (
+      {element.type === "text" && (
         <>
           {isEditing && !readOnly ? (
             <textarea
@@ -303,8 +335,8 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
                 textAlign: element.style?.textAlign,
                 textDecoration: element.style?.textDecoration,
                 color: element.style?.color,
-                fontFamily: element.style?.fontFamily || 'inherit',
-                cursor: 'text',
+                fontFamily: element.style?.fontFamily || "inherit",
+                cursor: "text",
               }}
               value={localText}
               onChange={(e) => handleTextChange(e.target.value)}
@@ -322,37 +354,61 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
                 textAlign: element.style?.textAlign,
                 textDecoration: element.style?.textDecoration,
                 color: element.style?.color,
-                fontFamily: element.style?.fontFamily || 'inherit',
-                alignItems: element.style?.alignItems || 'flex-start',
-                justifyContent: element.style?.textAlign === 'center' ? 'center' : element.style?.textAlign === 'right' ? 'flex-end' : 'flex-start',
+                fontFamily: element.style?.fontFamily || "inherit",
+                alignItems: element.style?.alignItems || "flex-start",
+                justifyContent:
+                  element.style?.textAlign === "center"
+                    ? "center"
+                    : element.style?.textAlign === "right"
+                      ? "flex-end"
+                      : "flex-start",
               }}
             >
-              <span style={{ width: '100%', textAlign: element.style?.textAlign }}>{localText}</span>
+              <span
+                style={{ width: "100%", textAlign: element.style?.textAlign }}
+              >
+                {localText}
+              </span>
             </div>
           )}
         </>
       )}
 
-      {element.type === 'image' && (
+      {element.type === "image" && (
         <>
-          {element.content && element.content !== 'uploading...' && element.content !== '' ? (
+          {element.content &&
+          element.content !== "uploading..." &&
+          element.content !== "" ? (
             <img
               src={element.content}
               alt=""
-              className="w-full h-full object-cover pointer-events-none"
-              onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/300x200?text=Image+Not+Found')}
+              className={`w-full h-full pointer-events-none ${element.style?.imageFit === "contain" ? "object-contain" : "object-cover"}`}
+              onError={(e) =>
+                (e.currentTarget.src =
+                  "https://via.placeholder.com/300x200?text=Image+Not+Found")
+              }
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 border-2 border-dashed border-slate-300 rounded">
-              {element.content === 'uploading...' ? (
+              {element.content === "uploading..." ? (
                 <>
                   <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mb-2"></div>
                   <span className="text-xs text-slate-500">読み込み中...</span>
                 </>
               ) : (
                 <>
-                  <svg className="w-8 h-8 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  <svg
+                    className="w-8 h-8 text-slate-400 mb-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
                   </svg>
                   <span className="text-xs text-slate-400">画像を選択</span>
                 </>
@@ -362,31 +418,32 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
         </>
       )}
 
-      {element.type === 'shape' && (
+      {element.type === "shape" && (
         <>
           {/* Rectangle (default) */}
-          {(!element.style?.shapeType || element.style.shapeType === 'rectangle') && (
+          {(!element.style?.shapeType ||
+            element.style.shapeType === "rectangle") && (
             <div
               className="w-full h-full"
               style={{
-                backgroundColor: element.style?.backgroundColor || '#3b82f6',
-                borderRadius: element.style?.borderRadius
+                backgroundColor: element.style?.backgroundColor || "#3b82f6",
+                borderRadius: element.style?.borderRadius,
               }}
             />
           )}
 
           {/* Circle */}
-          {element.style?.shapeType === 'circle' && (
+          {element.style?.shapeType === "circle" && (
             <div
               className="w-full h-full rounded-full"
               style={{
-                backgroundColor: element.style?.backgroundColor || '#3b82f6',
+                backgroundColor: element.style?.backgroundColor || "#3b82f6",
               }}
             />
           )}
 
           {/* Triangle - using CSS borders or SVG */}
-          {element.style?.shapeType === 'triangle' && (
+          {element.style?.shapeType === "triangle" && (
             <svg
               viewBox="0 0 100 100"
               preserveAspectRatio="none"
@@ -394,7 +451,7 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
             >
               <polygon
                 points="50,0 100,100 0,100"
-                fill={element.style?.backgroundColor || '#3b82f6'}
+                fill={element.style?.backgroundColor || "#3b82f6"}
               />
             </svg>
           )}
@@ -404,14 +461,38 @@ const _DraggableElement: React.FC<DraggableElementProps> = ({
       {/* Resize Handles */}
       {isSelected && !readOnly && !isEditing && (
         <>
-          <div className="resize-handle absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-blue-500 rounded-sm cursor-nwse-resize" onMouseDown={(e) => handleResizeStart(e, 'nw')} />
-          <div className="resize-handle absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-blue-500 rounded-sm cursor-nesw-resize" onMouseDown={(e) => handleResizeStart(e, 'ne')} />
-          <div className="resize-handle absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-blue-500 rounded-sm cursor-nesw-resize" onMouseDown={(e) => handleResizeStart(e, 'sw')} />
-          <div className="resize-handle absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-blue-500 rounded-sm cursor-nwse-resize" onMouseDown={(e) => handleResizeStart(e, 'se')} />
-          <div className="resize-handle absolute top-1/2 -left-1 w-2 h-4 -translate-y-1/2 bg-white border-2 border-blue-500 rounded-sm cursor-ew-resize" onMouseDown={(e) => handleResizeStart(e, 'w')} />
-          <div className="resize-handle absolute top-1/2 -right-1 w-2 h-4 -translate-y-1/2 bg-white border-2 border-blue-500 rounded-sm cursor-ew-resize" onMouseDown={(e) => handleResizeStart(e, 'e')} />
-          <div className="resize-handle absolute -top-1 left-1/2 w-4 h-2 -translate-x-1/2 bg-white border-2 border-blue-500 rounded-sm cursor-ns-resize" onMouseDown={(e) => handleResizeStart(e, 'n')} />
-          <div className="resize-handle absolute -bottom-1 left-1/2 w-4 h-2 -translate-x-1/2 bg-white border-2 border-blue-500 rounded-sm cursor-ns-resize" onMouseDown={(e) => handleResizeStart(e, 's')} />
+          <div
+            className="resize-handle absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-blue-500 rounded-sm cursor-nwse-resize"
+            onMouseDown={(e) => handleResizeStart(e, "nw")}
+          />
+          <div
+            className="resize-handle absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-blue-500 rounded-sm cursor-nesw-resize"
+            onMouseDown={(e) => handleResizeStart(e, "ne")}
+          />
+          <div
+            className="resize-handle absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-blue-500 rounded-sm cursor-nesw-resize"
+            onMouseDown={(e) => handleResizeStart(e, "sw")}
+          />
+          <div
+            className="resize-handle absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-blue-500 rounded-sm cursor-nwse-resize"
+            onMouseDown={(e) => handleResizeStart(e, "se")}
+          />
+          <div
+            className="resize-handle absolute top-1/2 -left-1 w-2 h-4 -translate-y-1/2 bg-white border-2 border-blue-500 rounded-sm cursor-ew-resize"
+            onMouseDown={(e) => handleResizeStart(e, "w")}
+          />
+          <div
+            className="resize-handle absolute top-1/2 -right-1 w-2 h-4 -translate-y-1/2 bg-white border-2 border-blue-500 rounded-sm cursor-ew-resize"
+            onMouseDown={(e) => handleResizeStart(e, "e")}
+          />
+          <div
+            className="resize-handle absolute -top-1 left-1/2 w-4 h-2 -translate-x-1/2 bg-white border-2 border-blue-500 rounded-sm cursor-ns-resize"
+            onMouseDown={(e) => handleResizeStart(e, "n")}
+          />
+          <div
+            className="resize-handle absolute -bottom-1 left-1/2 w-4 h-2 -translate-x-1/2 bg-white border-2 border-blue-500 rounded-sm cursor-ns-resize"
+            onMouseDown={(e) => handleResizeStart(e, "s")}
+          />
         </>
       )}
     </div>

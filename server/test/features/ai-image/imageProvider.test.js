@@ -3,6 +3,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 const FakeImageProvider = require('../../../src/features/ai-image/providers/fakeImageProvider');
+const GeminiImageProvider = require('../../../src/features/ai-image/providers/geminiImageProvider');
 const { createImageProvider } = require('../../../src/features/ai-image/providers/providerFactory');
 const {
   ImageProviderError,
@@ -60,4 +61,77 @@ test('factory defaults to fake and rejects unknown configuration', () => {
     () => createImageProvider({ provider: 'fake', fakeMode: 'typo' }),
     /Invalid FAKE_IMAGE_PROVIDER_MODE/,
   );
+});
+
+test('gemini provider sends the selected ratio and normalizes an image response', async () => {
+  let request;
+  const provider = new GeminiImageProvider({
+    apiKey: 'test-only-key',
+    model: 'gemini-3.1-flash-image',
+    imageSize: '1K',
+    fetch: async (url, options) => {
+      request = { url, options };
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          id: 'interaction-123',
+          steps: [{ type: 'model_output', content: [{
+            type: 'image',
+            data: 'iVBORw0KGgo=',
+            mime_type: 'image/png',
+          }] }],
+        }),
+      };
+    },
+  });
+
+  const result = await provider.generate({ prompt: 'A clear force diagram', aspectRatio: '16:9' });
+  const body = JSON.parse(request.options.body);
+
+  assert.match(request.url, /generativelanguage\.googleapis\.com/);
+  assert.equal(request.options.headers['x-goog-api-key'], 'test-only-key');
+  assert.equal(body.model, 'gemini-3.1-flash-image');
+  assert.deepEqual(body.response_format, {
+    type: 'image',
+    mime_type: 'image/png',
+    aspect_ratio: '16:9',
+    image_size: '1K',
+  });
+  assert.equal(result.status, 'completed');
+  assert.equal(result.externalJobId, 'interaction-123');
+  assert.equal(result.image.url, 'data:image/png;base64,iVBORw0KGgo=');
+  assert.deepEqual([result.image.width, result.image.height], [1376, 768]);
+  assert.equal(result.image.provider, 'gemini');
+  assert.equal(result.image.model, 'gemini-3.1-flash-image');
+});
+
+test('gemini provider validates configuration without exposing credentials', async () => {
+  assert.throws(() => new GeminiImageProvider(), /GEMINI_API_KEY is required/);
+  assert.throws(
+    () => new GeminiImageProvider({ apiKey: 'secret', imageSize: '8K' }),
+    /Invalid GEMINI_IMAGE_SIZE/,
+  );
+
+  const provider = new GeminiImageProvider({
+    apiKey: 'must-not-leak',
+    fetch: async () => ({ ok: false, status: 429 }),
+  });
+  await assert.rejects(
+    provider.generate({ prompt: 'safe prompt', aspectRatio: '1:1' }),
+    (error) => {
+      assert.equal(error.code, 'PROVIDER_UNAVAILABLE');
+      assert.doesNotMatch(JSON.stringify(error), /must-not-leak/);
+      return true;
+    },
+  );
+});
+
+test('factory creates the configured gemini provider', () => {
+  const provider = createImageProvider({
+    provider: 'gemini',
+    apiKey: 'test-only-key',
+    fetch: async () => ({ ok: true, status: 200, json: async () => ({}) }),
+  });
+  assert.ok(provider instanceof GeminiImageProvider);
 });

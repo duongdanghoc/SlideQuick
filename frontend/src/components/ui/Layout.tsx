@@ -1,7 +1,8 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutTemplate, Home, LogOut, Trash2 } from 'lucide-react';
+import { Home, LogOut, Sparkles, Trash2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { Button } from './Button';
+import { BrandLogo } from './BrandLogo';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const navItems = [
+    { label: 'Tạo ảnh AI', icon: <Sparkles className="w-5 h-5" />, path: '/ai-images' },
     { label: 'Tất cả dự án', icon: <Home className="w-5 h-5" />, path: '/' },
     { label: 'Thùng rác', icon: <Trash2 className="w-5 h-5" />, path: '/trash' },
   ];
@@ -29,9 +31,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center gap-8">
-              <Link to="/" className="flex items-center gap-2">
-                <LayoutTemplate className="w-7 h-7 text-primary-600" />
-                <span className="text-xl font-bold font-display text-primary-600">EduArt AI</span>
+              <Link to="/" aria-label="EduArt AI - Trang chủ" className="flex items-center gap-2">
+                <BrandLogo className="h-12 w-auto" />
+                <span className="hidden sm:inline text-xl font-bold font-display text-primary-700">
+                  EduArt AI
+                </span>
               </Link>
 
               <div className="hidden md:flex gap-1">

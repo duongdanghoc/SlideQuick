@@ -90,7 +90,7 @@ export async function exportToPDF(project: Project) {
           img.src = el.content;
           img.style.width = "100%";
           img.style.height = "100%";
-          img.style.objectFit = "cover"; // standard for this app
+          img.style.objectFit = el.style?.imageFit || "cover";
           img.style.display = "block";
           // Handle image load error placeholder
           img.onerror = () => {

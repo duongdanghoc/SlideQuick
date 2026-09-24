@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200" role="img" aria-labelledby="title description">
+  <title id="title">EduArt portrait generated image fixture</title>
+  <desc id="description">Deterministic three by four placeholder used by the fake image provider.</desc>
+  <rect width="900" height="1200" fill="#eef2ff"/>
+  <circle cx="450" cy="500" r="140" fill="#4f46e5" opacity=".12"/>
+  <path d="M375 500h150M450 425v150" stroke="#4f46e5" stroke-width="26" stroke-linecap="round"/>
+  <text x="450" y="780" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" fill="#1e293b">EduArt 3:4 fixture</text>
+</svg>

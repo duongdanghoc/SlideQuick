@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title description">
+  <title id="title">EduArt square generated image fixture</title>
+  <desc id="description">Deterministic square placeholder used by the fake image provider.</desc>
+  <rect width="1024" height="1024" fill="#eef2ff"/>
+  <circle cx="512" cy="430" r="150" fill="#4f46e5" opacity=".12"/>
+  <path d="M430 430h164M512 348v164" stroke="#4f46e5" stroke-width="28" stroke-linecap="round"/>
+  <text x="512" y="700" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" fill="#1e293b">EduArt 1:1 fixture</text>
+</svg>

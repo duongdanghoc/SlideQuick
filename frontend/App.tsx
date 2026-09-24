@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -16,6 +16,8 @@ import { Register } from "./src/pages/Register";
 import { ForgotPassword } from "./src/pages/ForgotPassword";
 import { ResetPassword } from "./src/pages/ResetPassword";
 import Trash from "./src/pages/Trash";
+
+const AiImageStudio = lazy(() => import("./src/pages/AiImageStudio"));
 
 
 function RequireAuth({ children }: { children: React.ReactElement }) {
@@ -87,6 +89,22 @@ function App() {
             element={
               <RequireAuth>
                 <Trash />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/ai-images"
+            element={
+              <RequireAuth>
+                <Suspense
+                  fallback={
+                    <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                      <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary-200 border-t-primary-600" />
+                    </div>
+                  }
+                >
+                  <AiImageStudio />
+                </Suspense>
               </RequireAuth>
             }
           />
